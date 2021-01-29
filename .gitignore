@@ -3,3 +3,4 @@ morpion.*
 neatOld.c
 *.o
 neat
+score/*.csv

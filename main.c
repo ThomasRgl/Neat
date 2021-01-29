@@ -161,7 +161,7 @@ int main2() {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 int main(/*int argc, char *argv[]*/) {
-
+    initGlobalVar();
 /*    if(argc < 2 ){
         printf("nb arg: %d\n", argc );
         printf("Veuillez mettre le nom du fichier de log\n");
@@ -229,7 +229,7 @@ int main(/*int argc, char *argv[]*/) {
 
     //data
     for(int k = 0; k < 1; k++){
-        for( int j = 0; j < 3000; j++){
+        for( int j = 0; j < 300; j++){
             printf("%d\n",j );
             for( int i = 0; i < TAILLE_POPULATION; i++){
                 //population[i]

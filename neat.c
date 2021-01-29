@@ -24,6 +24,26 @@ struct NeatNeuralNetwork
 };*/
 
 //
+void initGlobalVar(){
+    if( NB_HIDDEN_LAYER == 0 ){
+        TOTAL_WEIGHT = ( NB_INPUT + 1 ) * NB_NEURONS_OUTPUT;
+    }
+    else{
+        TOTAL_WEIGHT = ( NB_INPUT + 1 ) * NB_NEURONS_HIDDEN;
+        for ( int i = 1; i < NB_NEURONS_HIDDEN; i ++)
+            TOTAL_WEIGHT =  ( NB_NEURONS_HIDDEN + 1 ) * NB_NEURONS_HIDDEN;
+        TOTAL_WEIGHT += ( NB_NEURONS_HIDDEN + 1 ) * NB_NEURONS_OUTPUT;
+
+    }
+
+    TAILLE_CROSSOVER_MAX = (TOTAL_WEIGHT * CROSSOVER_PERCENT ) / 100;
+
+    printf("tailleCrossover : %d \n", TAILLE_CROSSOVER_MAX );
+    printf("total_weight : %d \n", TOTAL_WEIGHT );
+
+}
+
+//
 double sigmoid(double x){
     return 1 / (1 + exp(-x) );
 }

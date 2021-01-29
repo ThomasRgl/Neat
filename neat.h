@@ -12,8 +12,8 @@
     #define SIGMA_CROSSOVER 1
     #define CROSSOVER_PERCENT 10
 
-    int tailleCrossover = (TAILLE_POPULATION * CROSSOVER_PERCENT ) / 100
-    int total_weight ; 
+    int TAILLE_CROSSOVER_MAX ;//= (TAILLE_POPULATION * CROSSOVER_PERCENT ) / 100;
+    int TOTAL_WEIGHT ;
     //
     typedef struct Layer
     {
@@ -46,6 +46,7 @@
     }NeuralNetwork;
 
     /*prototype*/
+    void initGlobalVar();
     double sigmoid(double x);
     double d_sigmoid(double x);
     double rand_gen();
