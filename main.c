@@ -161,7 +161,9 @@ int main2() {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 int main(/*int argc, char *argv[]*/) {
+
     initGlobalVar();
+
 /*    if(argc < 2 ){
         printf("nb arg: %d\n", argc );
         printf("Veuillez mettre le nom du fichier de log\n");
@@ -169,7 +171,6 @@ int main(/*int argc, char *argv[]*/) {
         printf("%s\n",argv[1] );
     }*/
     srand(time(NULL));
-
 
     FILE* fileScore = openLog("score/score.csv");
     FILE* fileId = openLog("score/id.csv");
@@ -225,12 +226,13 @@ int main(/*int argc, char *argv[]*/) {
         data[i] = 0;
         fitnessClassement[i] = 0;
         population[i]->id = i;
+        printNetwork(population[i]);
     }
 
     //data
     for(int k = 0; k < 1; k++){
-        for( int j = 0; j < 300; j++){
-            printf("%d\n",j );
+        for( int j = 0; j < 1; j++){
+            //printf("%d\n",j );
             for( int i = 0; i < TAILLE_POPULATION; i++){
                 //population[i]
 
@@ -312,30 +314,30 @@ int main(/*int argc, char *argv[]*/) {
                 //printNetwork(population[i]);
             }
             */
-            /*
+
             printf("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n" );
             printf("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n" );
             printf("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n" );
-            */
 
 
-                        writeLogScore(fileScore, population);
-                        writeLogId(fileId, population);
-            //if(j != 49)
-            population = fuck(population);
 
 
-            //for( int i = 0; i < TAILLE_POPULATION; i++){
-                //printNetwork(population[i]);
-            //}
+            if(j != 49)
+                population = fuck(population);
+
+
+            for( int i = 0; i < TAILLE_POPULATION; i++){
+                printNetwork(population[i]);
+            }
             //getchar();
 
         }
-
+        //writeLogScore(fileScore, population);
+        //writeLogId(fileId, population);
         printf("%dk\n",k );
         population = fuck(population);
     }
-
+    //printNetwork(nn);
 /*
     for( int i = 0; i < TAILLE_POPULATION; i++){
         printf("score nn %d : %lf\n",i, (population[i])->score);

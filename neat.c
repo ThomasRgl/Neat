@@ -290,16 +290,24 @@ NeuralNetwork ** fuck(NeuralNetwork ** population){
 
     NeuralNetwork ** newPopulation = malloc(TAILLE_POPULATION * sizeof(NeuralNetwork));
 
+    NeuralNetwork * a;
+    NeuralNetwork * b;
+
     for( int i = 0; i < TAILLE_POPULATION; i++){
 
+        a = pickOne(population);
+        b = pickOne(population);
+        newPopulation[i] = crossover(a, b);
+        mutate(newPopulation[i]);
         //newPopulation[i] = malloc( sizeof(NeuralNetwork));
         //newPopulation[i] = malloc( sizeof(NeuralNetwork));
-        newPopulation[i] = pickOne(population);
+        //newPopulation[i] = pickOne(population);
+
     }
     destroyPopulation(population);
     return newPopulation;
 }
-
+/*
 //
 NeuralNetwork * pickOne(NeuralNetwork ** population){
 
@@ -319,6 +327,67 @@ NeuralNetwork * pickOne(NeuralNetwork ** population){
     nn->id = population[index]->id;
     return nn;
 
+}*/
+//
+NeuralNetwork * pickOne(NeuralNetwork ** population){
+
+    int index = 0;
+    double r = (double) rand()/ (double) RAND_MAX;
+    while ( r > 0) {
+        r = r - (population[index])->fitness;
+
+        index += 1;
+    }
+
+    index -= 1;
+    return population[index] ;
+}
+//
+NeuralNetwork * crossover(NeuralNetwork * a, NeuralNetwork * b){
+
+    int remainingToLocation = ((double) rand()/ (double) RAND_MAX )*(TOTAL_WEIGHT-TAILLE_CROSSOVER_MAX);
+    int crossoverRemaining = TAILLE_CROSSOVER_MAX;
+
+    NeuralNetwork * nn = malloc( sizeof(NeuralNetwork) );
+
+    if(! nn) exit(EXIT_FAILURE);
+
+    initNeuralNetwork(nn, NB_INPUT, NB_HIDDEN_LAYER, NB_NEURONS_HIDDEN, NB_NEURONS_OUTPUT);
+
+    Layer * layerA = a->firstLayer->nextLayer;
+    Layer * layerB = b->firstLayer->nextLayer;
+    Layer * layer = nn->firstLayer->nextLayer;
+
+    while(layer){
+        for (unsigned long long i = 0; i < layer->length ; i++) {
+            if( crossoverRemaining == 0 || remainingToLocation != 0){
+                (layer->bias)[i] = (layerA->bias)[i];
+                remainingToLocation -= 1;
+            }
+            else {
+                (layer->bias)[i] = (layerB->bias)[i]*100;
+                crossoverRemaining -= 1;
+            }
+
+            for (unsigned long long j = 0; j < layer->previousLayer->length; j++ ){
+
+                if( crossoverRemaining == 0 || remainingToLocation != 0){
+                    (layer->w)[i][j] = (layerA->w)[i][j];
+                    remainingToLocation -= 1;
+                }
+                else {
+                    (layer->w)[i][j] = (layerB->w)[i][j]*100;
+                    crossoverRemaining -= 1;
+                }
+            }
+        }
+        layer = layer->nextLayer;
+        layerA = layerA->nextLayer;
+        layerB = layerB->nextLayer;
+
+    }
+
+    return nn;
 }
 
 //
@@ -409,8 +478,8 @@ void mutate( NeuralNetwork * nn ){
 }
 
 void setScore(NeuralNetwork * nn, double score){
-    //nn->score = score;
-    nn->score = exp(score);
+    nn->score = score;
+    //nn->score = exp(score);
     nn->rawScore = score;
     return;
 }

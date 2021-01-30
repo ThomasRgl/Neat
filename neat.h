@@ -1,19 +1,19 @@
 #ifndef NEAT_H
     #define NEAT_H
 
-    #define TAILLE_POPULATION 200
-    #define CROSSOVER_NUMBER 100
+    #define TAILLE_POPULATION 2
+    //#define CROSSOVER_NUMBER 100
     #define NB_INPUT 4
     #define NB_HIDDEN_LAYER 1
     #define NB_NEURONS_HIDDEN 4
     #define NB_NEURONS_OUTPUT 4
-    #define MUTATION_RATE 0.1
+    #define MUTATION_RATE 0
     #define SIGMA_MUTATION 0.1
-    #define SIGMA_CROSSOVER 1
-    #define CROSSOVER_PERCENT 10
+    //#define SIGMA_CROSSOVER 1
+    #define CROSSOVER_PERCENT 50
 
-    int TAILLE_CROSSOVER_MAX ;//= (TAILLE_POPULATION * CROSSOVER_PERCENT ) / 100;
-    int TOTAL_WEIGHT ;
+    int TAILLE_CROSSOVER_MAX ;//10 //= (TAILLE_POPULATION * CROSSOVER_PERCENT ) / 100;
+    int TOTAL_WEIGHT ; //40
     //
     typedef struct Layer
     {
@@ -65,6 +65,7 @@
     void copy(NeuralNetwork * NewNn,  NeuralNetwork * nn );
     NeuralNetwork ** fuck(NeuralNetwork ** population);
     NeuralNetwork *  pickOne(NeuralNetwork ** population);
+    NeuralNetwork * crossover(NeuralNetwork * a, NeuralNetwork * b);
     void calculateFitness(NeuralNetwork ** population);
     //void copy( NeuralNetwork * nn );
     void mutate( NeuralNetwork * nn );
