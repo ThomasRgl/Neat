@@ -44,10 +44,10 @@ void afficherJeu(int resultat ){
 //
 void afficherInfo(NeuralNetwork ** population ){
     for( int i = 0; i < TAILLE_POPULATION; i++){
-        printf("score n %d : %lf\n",i,population[i]->score );
-        printf("fitness n %d : %lf\n",i,population[i]->fitness );
-        printf("id : %d \n",population[i]->id);
-        printNetwork(population[i]);
+        printf("id: %d - score: %lf - fitness: %lf\n", population[i]->id, population[i]->rawScore, population[i]->fitness );
+        //printf("fitness n %d : %lf\n",i,population[i]->fitness );
+        //printf("id : %d \n",population[i]->id);
+        //printNetwork(population[i]);
     }
 }
 
@@ -100,7 +100,8 @@ NeuralNetwork ** play( NeuralNetwork ** population ){
 
     //printPopulaton(population);
     afficherInfo( population);
-
+    printf(">\n");
+    getchar();
     population = fuck(population);
 
     return population;
@@ -124,8 +125,10 @@ int main() {
 
     initGame(population, data, fitnessClassement );
 
-    for( int j = 0; j < 1; j++){
+    for( int j = 0; j < 1000; j++){
         population = play(  population );
+        //writeLogScore(fileScore, population);
+        //writeLogId(fileId, population);
     }
 
 

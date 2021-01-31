@@ -371,7 +371,7 @@ NeuralNetwork * crossover(NeuralNetwork * a, NeuralNetwork * b){
                 remainingToLocation -= 1;
             }
             else {
-                (layer->bias)[i] = (layerB->bias)[i]*100;
+                (layer->bias)[i] = (layerB->bias)[i];
                 crossoverRemaining -= 1;
             }
 
@@ -382,7 +382,7 @@ NeuralNetwork * crossover(NeuralNetwork * a, NeuralNetwork * b){
                     remainingToLocation -= 1;
                 }
                 else {
-                    (layer->w)[i][j] = (layerB->w)[i][j]*100;
+                    (layer->w)[i][j] = (layerB->w)[i][j];
                     crossoverRemaining -= 1;
                 }
             }
@@ -392,7 +392,7 @@ NeuralNetwork * crossover(NeuralNetwork * a, NeuralNetwork * b){
         layerB = layerB->nextLayer;
 
     }
-
+    nn->id = a->id;
     return nn;
 }
 
@@ -464,18 +464,18 @@ void mutate( NeuralNetwork * nn ){
     //
     while(layer){
         for (unsigned long long i = 0; i < layer->length ; i++) {
-
+            /*
             if( MUTATION_RATE > (double) rand()/RAND_MAX){ (layer->bias)[i] += normalRandom()*0.2;}
 
             for (unsigned long long j = 0; j < layer->previousLayer->length; j++ ){
                 if( MUTATION_RATE > (double) rand()/RAND_MAX){ (layer->w)[i][j] += normalRandom()*0.2;}
-            }
-            /*
+            }*/
+
             if( MUTATION_RATE > (double) rand()/RAND_MAX){ (layer->bias)[i] = (double) rand()/RAND_MAX;}
 
             for (unsigned long long j = 0; j < layer->previousLayer->length; j++ ){
                 if( MUTATION_RATE > (double) rand()/RAND_MAX){ (layer->w)[i][j] = (double) rand()/RAND_MAX;}
-            }*/
+            }
         }
         layer = layer->nextLayer;
     }
@@ -484,8 +484,8 @@ void mutate( NeuralNetwork * nn ){
 }
 
 void setScore(NeuralNetwork * nn, double score){
-    nn->score = score;
-    //nn->score = exp(score);
+    //nn->score = score;
+    nn->score = exp(score);
     nn->rawScore = score;
     return;
 }
@@ -542,7 +542,7 @@ FILE* openLog( char *fileName ){
 
     if( file != NULL){
         fseek(file, 0, SEEK_END);
-        printf("%ld\n", ftell(file) );
+        //printf("%ld\n", ftell(file) );
 
         if( ftell(file) != 0 ){
             printf("le fichier n'est pas vide !\n" );

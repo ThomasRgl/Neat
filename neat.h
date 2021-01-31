@@ -1,13 +1,13 @@
 #ifndef NEAT_H
     #define NEAT_H
 
-    #define TAILLE_POPULATION 2
+    #define TAILLE_POPULATION 10
     //#define CROSSOVER_NUMBER 100
     #define NB_INPUT 4
     #define NB_HIDDEN_LAYER 1
     #define NB_NEURONS_HIDDEN 4
     #define NB_NEURONS_OUTPUT 4
-    #define MUTATION_RATE 0
+    #define MUTATION_RATE 0.3
     #define SIGMA_MUTATION 0.1
     //#define SIGMA_CROSSOVER 1
     #define CROSSOVER_PERCENT 50
