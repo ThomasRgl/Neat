@@ -201,6 +201,13 @@ void printNetwork(NeuralNetwork * nn){
 }
 
 //
+void printPopulaton(NeuralNetwork ** population){
+    for( int i = 0; i < TAILLE_POPULATION; i++){
+        printNetwork(population[i]);
+    }
+}
+
+//
 void initWeigth(NeuralNetwork * nn) {
 
     //

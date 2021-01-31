@@ -56,6 +56,7 @@
     void compute(NeuralNetwork * nn);
     void setInput(NeuralNetwork * nn, double * inputList);
     void printNetwork(NeuralNetwork * nn);
+    void printPopulaton(NeuralNetwork ** population);
     void initWeigth(NeuralNetwork * nn);
     //void initEmptyWeigth(NeuralNetwork * nn);
     void initLayer(NeuralNetwork * nn, unsigned long long taille );
