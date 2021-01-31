@@ -21,7 +21,38 @@ void initGame(NeuralNetwork ** population, double * data, double * fitnessClasse
 }
 
 //
-void play( NeuralNetwork ** population ){
+void afficherJeu(int resultat ){
+    afficheGrille();
+    switch (resultat) {
+        case 0:
+            printf(">haut\n" );
+            break;
+        case 1:
+            printf(">Bas\n" );
+            break;
+        case 2:
+            printf(">gauche\n" );
+            break;
+        case 3:
+            printf(">droite\n" );
+            break;
+        default:
+            break;
+        }
+}
+
+//
+void afficherInfo(NeuralNetwork ** population ){
+    for( int i = 0; i < TAILLE_POPULATION; i++){
+        printf("score n %d : %lf\n",i,population[i]->score );
+        printf("fitness n %d : %lf\n",i,population[i]->fitness );
+        printf("id : %d \n",population[i]->id);
+        printNetwork(population[i]);
+    }
+}
+
+//
+NeuralNetwork ** play( NeuralNetwork ** population ){
     Snake * snake ;
 
     int resultat = 4;
@@ -36,30 +67,11 @@ void play( NeuralNetwork ** population ){
         initSnake(snake);
         //
         while (end == FALSE) {
-
-            //afficheGrille();
             setInput(population[i], getInput(snake, NB_INPUT));
             compute(population[i]);
             resultat = result(population[i]);
-            //printNetwork(population[i]);
-            /*
-            switch (resultat) {
-                case 0:
-                    printf(">haut\n" );
-                    break;
-                case 1:
-                    printf(">Bas\n" );
-                    break;
-                case 2:
-                    printf(">gauche\n" );
-                    break;
-                case 3:
-                    printf(">droite\n" );
-                    break;
-                default:
-                    break;
-            }
-            */
+            //afficherJeu(resultat);
+
             switch (resultat) {
                 case 0:
                     end = move(snake, -1, 0);
@@ -79,45 +91,20 @@ void play( NeuralNetwork ** population ){
                     end = TRUE;
                     break;
             }
-
-
         }
         setScore(population[i], getScore(snake));
-        //data[i] = getScore(snake);
         destroySnake(snake);
     }
+
     calculateFitness(population);
 
-
-    for( int i = 0; i < TAILLE_POPULATION; i++){
-        //printNetwork(population[i]);
-    }
-
-    //printf("\n\n\n\n%d\n",j );
-
-    /*
-    for( int i = 0; i < TAILLE_POPULATION; i++){
-        //printNetwork(population[i]);
-        fitnessClassement[i] = population[i]->fitness;
-
-        printf("score n %d : %lf\n",i,data[i] );
-        printf("fitness n %d : %lf\n",i,fitnessClassement[i] );
-        printf("id : %d \n",population[i]->id);
-        //printNetwork(population[i]);
-    }
-    */
-
-    printf("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n" );
-    printf("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n" );
-    printf("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n" );
-
-
-
-
+    //printPopulaton(population);
+    afficherInfo( population);
 
     population = fuck(population);
 
-    printPopulaton(population);
+    return population;
+    //printPopulaton(population);
 }
 
 //
@@ -138,7 +125,7 @@ int main() {
     initGame(population, data, fitnessClassement );
 
     for( int j = 0; j < 1; j++){
-        play(  population );
+        population = play(  population );
     }
 
 
@@ -148,7 +135,6 @@ int main() {
     free(fitnessClassement);
     fclose(fileScore);
     fclose(fileId);
-    //free(file);
     return 0;
 }
 

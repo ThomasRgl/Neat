@@ -294,7 +294,6 @@ void initNeuralNetwork(NeuralNetwork * nn, unsigned long long nbInput, unsigned 
 //
 NeuralNetwork ** fuck(NeuralNetwork ** population){
 
-
     NeuralNetwork ** newPopulation = malloc(TAILLE_POPULATION * sizeof(NeuralNetwork));
 
     NeuralNetwork * a;
@@ -500,6 +499,7 @@ void destroyPopulation( NeuralNetwork ** population ){
 }
 
 void destroyNetwork(NeuralNetwork * nn){
+
 
     Layer * layer = NULL;
     layer = nn->lastLayer;
