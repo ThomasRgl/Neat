@@ -38,6 +38,18 @@ void initGlobalVar(){
 
     TAILLE_CROSSOVER_MAX = (TOTAL_WEIGHT * CROSSOVER_PERCENT ) / 100;
 
+    inputChar[0] = "haut";
+    inputChar[1] = "bas";
+    inputChar[2] = "gauche";
+    inputChar[3] = "droite";
+
+    outputChar[0] = "haut";
+    outputChar[1] = "bas";
+    outputChar[2] = "gauche";
+    outputChar[3] = "droite";
+
+
+
     printf("tailleCrossover : %d \n", TAILLE_CROSSOVER_MAX );
     printf("total_weight : %d \n", TOTAL_WEIGHT );
 
@@ -51,6 +63,10 @@ double sigmoid(double x){
 //
 double d_sigmoid(double x){
     return x * (1 - x);
+}
+
+double newSigmoid(double x){
+    return 1 / (1 + exp(-(x-7)*0.6) );
 }
 
 //
@@ -138,9 +154,10 @@ void setInput(NeuralNetwork * nn, double * inputList){
     layer = nn->firstLayer;
 
     //printf("%llu\n",layer->length );
-    for( unsigned long long i = 0; i < layer->length; i++ )
-        (layer->neurons)[i] = inputList[i];
-
+    for( unsigned long long i = 0; i < layer->length; i++ ){
+        //(layer->neurons)[i] = inputList[i]; //input par default
+        (layer->neurons)[i] = newSigmoid(inputList[i]); //transforme l'input en un chiffre entre 0 et 1
+    }
     //Test
     //for( unsigned long long i = 0; i < layer->length; i++ )
     //    printf("input num %llu : %lf\n", i, (layer->neurons)[i]);
@@ -204,6 +221,44 @@ void printNetwork(NeuralNetwork * nn){
 void printPopulaton(NeuralNetwork ** population){
     for( int i = 0; i < TAILLE_POPULATION; i++){
         printNetwork(population[i]);
+    }
+}
+
+//
+void afficherData(NeuralNetwork * nn){
+    Layer * layer = NULL;
+    layer = nn->firstLayer;
+
+    if(inputChar != NULL){
+        for(int i = 0; i < NB_INPUT; i++){
+            printf("%s : %lf\n",inputChar[i], layer->neurons[i] );
+        }
+    }
+    else{
+        for(int i = 0; i < NB_INPUT; i++){
+            printf("input %d : %lf\n",i , layer->neurons[i] );
+        }
+    }
+
+    layer = layer->nextLayer;
+    printf("\n\n\n" );
+    while(layer->nextLayer){
+        for(int i = 0; i < NB_NEURONS_HIDDEN; i++){
+            printf("neurons  %d : %lf\n",i , layer->neurons[i] );
+        }
+        layer = layer->nextLayer;
+        printf("\n\n\n" );
+    }
+
+    if(outputChar != NULL){
+        for(int i = 0; i < NB_NEURONS_OUTPUT; i++){
+            printf("%s : %lf\n",outputChar[i], layer->neurons[i] );
+        }
+    }
+    else{
+        for(int i = 0; i < NB_NEURONS_OUTPUT; i++){
+            printf("ouput %d : %lf\n",i , layer->neurons[i] );
+        }
     }
 }
 
@@ -464,18 +519,18 @@ void mutate( NeuralNetwork * nn ){
     //
     while(layer){
         for (unsigned long long i = 0; i < layer->length ; i++) {
-            /*
+
             if( MUTATION_RATE > (double) rand()/RAND_MAX){ (layer->bias)[i] += normalRandom()*0.2;}
 
             for (unsigned long long j = 0; j < layer->previousLayer->length; j++ ){
                 if( MUTATION_RATE > (double) rand()/RAND_MAX){ (layer->w)[i][j] += normalRandom()*0.2;}
-            }*/
-
-            if( MUTATION_RATE > (double) rand()/RAND_MAX){ (layer->bias)[i] = (double) rand()/RAND_MAX;}
-
-            for (unsigned long long j = 0; j < layer->previousLayer->length; j++ ){
-                if( MUTATION_RATE > (double) rand()/RAND_MAX){ (layer->w)[i][j] = (double) rand()/RAND_MAX;}
             }
+
+            // if( MUTATION_RATE > (double) rand()/RAND_MAX){ (layer->bias)[i] = (double) rand()/RAND_MAX;}
+            //
+            // for (unsigned long long j = 0; j < layer->previousLayer->length; j++ ){
+            //     if( MUTATION_RATE > (double) rand()/RAND_MAX){ (layer->w)[i][j] = (double) rand()/RAND_MAX;}
+            // }
         }
         layer = layer->nextLayer;
     }

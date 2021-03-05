@@ -51,6 +51,13 @@ void afficherInfo(NeuralNetwork ** population ){
     }
 }
 
+void jump(int a){
+    for( int i = 0; i < a; i++){
+        printf("\n");
+    }
+
+}
+
 //
 NeuralNetwork ** play( NeuralNetwork ** population ){
     Snake * snake ;
@@ -70,7 +77,12 @@ NeuralNetwork ** play( NeuralNetwork ** population ){
             setInput(population[i], getInput(snake, NB_INPUT));
             compute(population[i]);
             resultat = result(population[i]);
-            //afficherJeu(resultat);
+            jump(10);
+            printNetwork(population[i]);
+            //afficherData(population[i]);
+            afficherJeu(resultat);
+            printf(">\n");
+            getchar();
 
             switch (resultat) {
                 case 0:
@@ -98,6 +110,10 @@ NeuralNetwork ** play( NeuralNetwork ** population ){
 
     calculateFitness(population);
 
+
+    // writeLogScore(fileScore, population);
+    // writeLogId(fileId, population);
+
     //printPopulaton(population);
     afficherInfo( population);
     printf(">\n");
@@ -105,7 +121,6 @@ NeuralNetwork ** play( NeuralNetwork ** population ){
     population = fuck(population);
 
     return population;
-    //printPopulaton(population);
 }
 
 //
@@ -115,8 +130,8 @@ int main() {
 
     srand(time(NULL));
 
-    FILE* fileScore = openLog("score/score.csv");
-    FILE* fileId = openLog("score/id.csv");
+    fileScore = openLog("score/score.csv");
+    fileId = openLog("score/id.csv");
 
     //Init nn
     NeuralNetwork ** population = malloc(TAILLE_POPULATION * sizeof(NeuralNetwork));
@@ -125,10 +140,9 @@ int main() {
 
     initGame(population, data, fitnessClassement );
 
-    for( int j = 0; j < 1000; j++){
+    for( int j = 0; j < 400; j++){
         population = play(  population );
-        //writeLogScore(fileScore, population);
-        //writeLogId(fileId, population);
+        printf("gen: %d\n", j );
     }
 
 

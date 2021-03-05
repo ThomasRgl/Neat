@@ -79,7 +79,7 @@ void initialiseGrille() {
  */
 void afficheGrille() {
     int i, j;
-    printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" );
+    //printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" );
     for (i=0; i<NB_LIG; i++) {
         for (j=0; j<NB_COL; j++) {
             switch (grille[i][j]) {

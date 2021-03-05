@@ -1,20 +1,27 @@
 #ifndef NEAT_H
     #define NEAT_H
 
-    #define TAILLE_POPULATION 10
+    #define TAILLE_POPULATION 3
     //#define CROSSOVER_NUMBER 100
     #define NB_INPUT 4
     #define NB_HIDDEN_LAYER 1
     #define NB_NEURONS_HIDDEN 4
     #define NB_NEURONS_OUTPUT 4
-    #define MUTATION_RATE 0.3
-    #define SIGMA_MUTATION 0.1
+    #define MUTATION_RATE 0.15
+    #define SIGMA_MUTATION 0.3
     //#define SIGMA_CROSSOVER 1
-    #define CROSSOVER_PERCENT 50
+    #define CROSSOVER_PERCENT 30
 
     int TAILLE_CROSSOVER_MAX ;//10 //= (TAILLE_POPULATION * CROSSOVER_PERCENT ) / 100;
     int TOTAL_WEIGHT ; //40
     //
+
+    char *inputChar[4];// = {"haut","bas","gauche","droite"};
+    char *outputChar[4];
+
+    FILE* fileScore;
+    FILE* fileId;
+
     typedef struct Layer
     {
         double * neurons;
@@ -48,6 +55,7 @@
     /*prototype*/
     void initGlobalVar();
     double sigmoid(double x);
+    double newSigmoid(double x);
     double d_sigmoid(double x);
     double rand_gen();
     double normalRandom();
@@ -57,6 +65,7 @@
     void setInput(NeuralNetwork * nn, double * inputList);
     void printNetwork(NeuralNetwork * nn);
     void printPopulaton(NeuralNetwork ** population);
+    void afficherData(NeuralNetwork * nn);
     void initWeigth(NeuralNetwork * nn);
     //void initEmptyWeigth(NeuralNetwork * nn);
     void initLayer(NeuralNetwork * nn, unsigned long long taille );
