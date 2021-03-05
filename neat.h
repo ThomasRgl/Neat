@@ -1,7 +1,7 @@
 #ifndef NEAT_H
     #define NEAT_H
 
-    #define TAILLE_POPULATION 3
+    #define TAILLE_POPULATION 400
     //#define CROSSOVER_NUMBER 100
     #define NB_INPUT 4
     #define NB_HIDDEN_LAYER 1

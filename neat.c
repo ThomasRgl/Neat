@@ -57,7 +57,9 @@ void initGlobalVar(){
 
 //
 double sigmoid(double x){
-    return 1 / (1 + exp(-x) );
+    //return 1 / (1 + exp(-x) ); //default sigmoid
+    return 1 / (1 + exp(-x) ) - 0.5;
+    //return ((1 / (1 + exp(-(x-5)*0.6)) -0.5)*2); //renvoi un nombre entre -1 et 1
 }
 
 //
@@ -66,7 +68,8 @@ double d_sigmoid(double x){
 }
 
 double newSigmoid(double x){
-    return 1 / (1 + exp(-(x-7)*0.6) );
+    //return 1 / (1 + exp(-(x-7)*0.6) ); // renvoi un nombre entre 0 et 1
+    return ((1 / (1 + exp(-(x-5)*0.6)) -0.5)*2); //renvoi un nombre entre -1 et 1
 }
 
 //
@@ -112,7 +115,7 @@ unsigned long long result( NeuralNetwork * nn ){
 
     //
     unsigned long long index;
-    double max = 0;
+    double max = -1;
     for(unsigned long long  i = 0; i < layer->length; i++){
         if(max <= layer->neurons[i]){
             max = layer->neurons[i];
@@ -540,6 +543,7 @@ void mutate( NeuralNetwork * nn ){
 
 void setScore(NeuralNetwork * nn, double score){
     //nn->score = score;
+    //nn->score = score*score;
     nn->score = exp(score);
     nn->rawScore = score;
     return;
@@ -601,8 +605,8 @@ FILE* openLog( char *fileName ){
 
         if( ftell(file) != 0 ){
             printf("le fichier n'est pas vide !\n" );
-            fclose( file );
-            exit(1);
+            //fclose( file );
+            //exit(1);
         }
         fclose( file );
     }

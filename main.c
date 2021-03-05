@@ -73,16 +73,22 @@ NeuralNetwork ** play( NeuralNetwork ** population ){
         snake = malloc(sizeof(Snake));
         initSnake(snake);
         //
-        while (end == FALSE) {
+        int try = 0;
+        while (end == FALSE && try<1000) {
+            if(/*try > 100*/getScore(snake) != try+1){
+                printf("%d try! score: %lf \n",try,getScore(snake) );
+            }
             setInput(population[i], getInput(snake, NB_INPUT));
             compute(population[i]);
             resultat = result(population[i]);
-            jump(10);
-            printNetwork(population[i]);
+
+            //                      Affichage
+            //jump(10);
+            //printNetwork(population[i]);
             //afficherData(population[i]);
-            afficherJeu(resultat);
-            printf(">\n");
-            getchar();
+            //afficherJeu(resultat);
+            //printf(">\n");
+            //getchar();
 
             switch (resultat) {
                 case 0:
@@ -98,11 +104,14 @@ NeuralNetwork ** play( NeuralNetwork ** population ){
                     end = move(snake, 0, 1);
                     break;
                 default:
-                    break;
+                    //break;
                     //printf("fin du jeu\n" );
+                    printf("%d\n", resultat );
+                    exit(0);
                     end = TRUE;
                     break;
             }
+            try += 1;
         }
         setScore(population[i], getScore(snake));
         destroySnake(snake);
@@ -110,14 +119,18 @@ NeuralNetwork ** play( NeuralNetwork ** population ){
 
     calculateFitness(population);
 
+    //                                  Log
+    writeLogScore(fileScore, population); // log score
+    writeLogId(fileId, population);
 
-    // writeLogScore(fileScore, population);
-    // writeLogId(fileId, population);
 
+    //                                  Affichage
     //printPopulaton(population);
-    afficherInfo( population);
-    printf(">\n");
-    getchar();
+    //afficherInfo( population);
+    //printf(">\n");
+    //getchar();
+
+
     population = fuck(population);
 
     return population;
@@ -140,9 +153,12 @@ int main() {
 
     initGame(population, data, fitnessClassement );
 
-    for( int j = 0; j < 400; j++){
+    for( int j = 0; j < 3000; j++){
         population = play(  population );
-        printf("gen: %d\n", j );
+        if(j%10 == 0){
+            printf("gen: %d\n", j );
+        }
+
     }
 
 
