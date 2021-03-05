@@ -38,10 +38,12 @@ void initGlobalVar(){
 
     TAILLE_CROSSOVER_MAX = (TOTAL_WEIGHT * CROSSOVER_PERCENT ) / 100;
 
-    inputChar[0] = "haut";
-    inputChar[1] = "bas";
-    inputChar[2] = "gauche";
-    inputChar[3] = "droite";
+    inputChar[0] = "distance Fruit verticale";
+    inputChar[1] = "distance Fruit horizontale";
+    inputChar[1] = "haut";
+    inputChar[2] = "bas";
+    inputChar[3] = "gauche";
+    inputChar[4] = "droite";
 
     outputChar[0] = "haut";
     outputChar[1] = "bas";

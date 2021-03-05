@@ -76,7 +76,7 @@ NeuralNetwork ** play( NeuralNetwork ** population ){
         int try = 0;
         while (end == FALSE && try<1000) {
             if(/*try > 100*/getScore(snake) != try+1){
-                printf("%d try! score: %lf \n",try,getScore(snake) );
+                //printf("%d try! score: %lf \n",try,getScore(snake) );
             }
             setInput(population[i], getInput(snake, NB_INPUT));
             compute(population[i]);
