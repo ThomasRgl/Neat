@@ -60,7 +60,65 @@ void jump(int a){
 
 //
 void playBest( NeuralNetwork ** population ){
+    NeuralNetwork * nn;
     nn = bestElement( population );
+
+    Snake * snake ;
+
+    int resultat = 4;
+    Boolean end = FALSE;
+    jump(10);
+    printf("score : %lf\n", nn->rawScore );
+    printf("pomme : %lf\n", nn->nbFruit );
+    printf("fitness : %lf\n", nn->fitness );
+    jump(10);
+
+
+    // Init snake
+    end = FALSE;
+    initialiseGrille();
+    snake = malloc(sizeof(Snake));
+    initSnake(snake);
+    //
+    int try = 0;
+    while (end == FALSE && try<1000) {
+        setInput(nn, getInput(snake, NB_INPUT));
+        compute(nn);
+        resultat = result(nn);
+
+        //                      Affichage
+        jump(10);
+        //printNetwork(nn);
+        afficherData(nn);
+        afficherJeu(resultat);
+        printf(">\n");
+        getchar();
+
+        switch (resultat) {
+            case 0:
+                end = move(snake, -1, 0);
+                break;
+            case 1:
+                end = move(snake, 1, 0);
+                break;
+            case 2:
+                end = move(snake, 0, -1);
+                break;
+            case 3:
+                end = move(snake, 0, 1);
+                break;
+            default:
+                //break;
+                //printf("fin du jeu\n" );
+                printf("%d\n", resultat );
+                exit(0);
+                end = TRUE;
+                break;
+        }
+        try += 1;
+
+    }
+
 }
 
 //

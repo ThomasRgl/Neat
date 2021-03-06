@@ -81,6 +81,7 @@
     void calculateFitness(NeuralNetwork ** population);
     //void copy( NeuralNetwork * nn );
     void mutate( NeuralNetwork * nn );
+    NeuralNetwork * bestElement(NeuralNetwork ** population);
     void setScore(NeuralNetwork * nn, double score, double nbFruit);
     void destroyPopulation(NeuralNetwork ** population);
     void destroyNetwork(NeuralNetwork * nn);

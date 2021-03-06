@@ -543,6 +543,21 @@ void mutate( NeuralNetwork * nn ){
     return;
 }
 
+NeuralNetwork * bestElement(NeuralNetwork ** population){
+    double BestScore = 0;
+    int  index = 0;
+    for( int i = 0; i < TAILLE_POPULATION; i++){
+        if(population[i]->rawScore > BestScore){
+            index = i;
+            BestScore = population[i]->rawScore;
+        }
+
+    }
+
+    return population[index];
+}
+
+
 void setScore(NeuralNetwork * nn, double score, double nbFruit){
     //nn->score = score;
     //nn->score = score*score;
