@@ -187,7 +187,7 @@ Boolean move(Snake * snake, int i, int j){
 
     addHead( snake, snake->head->ligne + i, snake->head->colonne + j);
 
-    snake->score += 1;
+    //snake->score += 1;
 
     if( val == FRUIT){
         generateFruit(snake);
