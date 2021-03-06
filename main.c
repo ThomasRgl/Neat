@@ -146,12 +146,12 @@ NeuralNetwork ** play( NeuralNetwork ** population , int printBest ){
             resultat = result(population[i]);
 
             //                      Affichage
-            //jump(10);
-            //printNetwork(population[i]);
-            //afficherData(population[i]);
-            //afficherJeu(resultat);
-            //printf(">\n");
-            //getchar();
+            // jump(10);
+            // printNetwork(population[i]);
+            // afficherData(population[i]);
+            // afficherJeu(resultat);
+            // printf(">\n");
+            // getchar();
 
             switch (resultat) {
                 case 0:

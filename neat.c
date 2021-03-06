@@ -38,12 +38,14 @@ void initGlobalVar(){
 
     TAILLE_CROSSOVER_MAX = (TOTAL_WEIGHT * CROSSOVER_PERCENT ) / 100;
 
-    inputChar[0] = "distance Fruit verticale";
-    inputChar[1] = "distance Fruit horizontale";
-    inputChar[2] = "haut";
-    inputChar[3] = "bas";
-    inputChar[4] = "gauche";
-    inputChar[5] = "droite";
+    inputChar[0] = "danger haut";
+    inputChar[1] = "danger bas";
+    inputChar[2] = "danger droite";
+    inputChar[3] = "danger gauche";
+    inputChar[4] = "fruit haut";
+    inputChar[5] = "fruit bas";
+    inputChar[6] = "fruit droite";
+    inputChar[7] = "fruit gauche";
 
     outputChar[0] = "haut";
     outputChar[1] = "bas";
@@ -59,8 +61,10 @@ void initGlobalVar(){
 
 //
 double sigmoid(double x){
-    //return 1 / (1 + exp(-x) ); //default sigmoid
-    return 1 / (1 + exp(-x) ) - 0.5;
+    //return x;
+    return 1 / (1 + exp(-((x-0.5)*10)) );
+    return 1 / (1 + exp(-(x)) ); //default sigmoid
+    //return 1 / (1 + exp(-x) ) - 0.5;
     //return ((1 / (1 + exp(-(x-5)*0.6)) -0.5)*2); //renvoi un nombre entre -1 et 1
 }
 
@@ -167,10 +171,10 @@ void setInput(NeuralNetwork * nn, double * inputList){
     //printf("%llu\n",layer->length );
     for( unsigned long long i = 0; i < layer->length; i++ ){
         //(layer->neurons)[i] = inputList[i]; //input par default
-        (layer->neurons)[i] = newSigmoid(inputList[i]); //transforme l'input en un chiffre entre 0 et 1
+        (layer->neurons)[i] = sigmoid(inputList[i]); //transforme l'input en un chiffre entre 0 et 1
     }
-    (layer->neurons)[0] = newSigmoid2(inputList[0]);
-    (layer->neurons)[1] = newSigmoid2(inputList[1]);
+    (layer->neurons)[0] = sigmoid(inputList[0]);
+    (layer->neurons)[1] = sigmoid(inputList[1]);
     //Test
     //for( unsigned long long i = 0; i < layer->length; i++ )
     //    printf("input num %llu : %lf\n", i, (layer->neurons)[i]);

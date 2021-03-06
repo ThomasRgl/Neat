@@ -3,7 +3,7 @@
 
     #define TAILLE_POPULATION 400
     //#define CROSSOVER_NUMBER 100
-    #define NB_INPUT 6
+    #define NB_INPUT 8
     #define NB_HIDDEN_LAYER 1
     #define NB_NEURONS_HIDDEN 4
     #define NB_NEURONS_OUTPUT 4
@@ -16,7 +16,7 @@
     int TOTAL_WEIGHT ; //40
     //
 
-    char *inputChar[6];// = {"haut","bas","gauche","droite"};
+    char *inputChar[8];// = {"haut","bas","gauche","droite"};
     char *outputChar[4];
 
     FILE* fileScore;
