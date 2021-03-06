@@ -25,6 +25,7 @@
     {
         double score;
         int length;
+        double nbFruit;
 
         struct Fruit * fruit;
         struct Body * head;
@@ -52,6 +53,8 @@
 
     //
     double getScore(Snake * snake);
+    double getFruit(Snake * snake);
+    
     void destroySnake(Snake * snake);
     //void destroyFruit(Fruit * fruit);
     void destroyBody(Body * body);

@@ -6,22 +6,8 @@
 //#include "morpion.h"
 #include "snake.h"
 
-
-int main2() {
-
-    srand(time(NULL));
-
-
-    //Snake init
-    Snake * snake ;
-    int resultat = 4;
-    Boolean end = FALSE;
-    //
-
-    //Init nn
-    NeuralNetwork ** population = malloc(TAILLE_POPULATION * sizeof(NeuralNetwork));
-    double * data = malloc(TAILLE_POPULATION * sizeof(double)); //data
-    double * fitnessClassement = malloc(TAILLE_POPULATION * sizeof(double)); //data
+//
+void initGame(NeuralNetwork ** population, double * data, double * fitnessClassement ){
 
     for( int i = 0; i < TAILLE_POPULATION; i++){
         population[i] = malloc( sizeof(NeuralNetwork));
@@ -30,324 +16,234 @@ int main2() {
         data[i] = 0;
         fitnessClassement[i] = 0;
         population[i]->id = i;
+        //printNetwork(population[i]);
     }
-
-    //data
-
-    for( int j = 0; j < 4; j++){
-        for( int i = 0; i < TAILLE_POPULATION; i++){
-
-            // Init snake
-            end = FALSE;
-            initialiseGrille();
-            snake = malloc(sizeof(Snake));
-            initSnake(snake);
-            //
-            //printf("--------------------------------------------\nNeuralNetwork num: %d",i );
-            while (end == FALSE) {
-
-                afficheGrille();
-                setInput(population[i], getInput(snake, NB_INPUT));
-                compute(population[i]);
-                resultat = result(population[i]);
-                //printNetwork(population[i]);
-
-                switch (resultat) {
-                    case 0:
-                        printf(">haut\n" );
-                        break;
-                    case 1:
-                        printf(">Bas\n" );
-                        break;
-                    case 2:
-                        printf(">gauche\n" );
-                        break;
-                    case 3:
-                        printf(">droite\n" );
-                        break;
-                    default:
-                        break;
-                }
-
-                switch (resultat) {
-                    case 0:
-                        end = move(snake, -1, 0);
-                        break;
-                    case 1:
-                        end = move(snake, 1, 0);
-                        break;
-                    case 2:
-                        end = move(snake, 0, -1);
-                        break;
-                    case 3:
-                        end = move(snake, 0, 1);
-                        break;
-                    default:
-                        break;
-                        printf("fin du jeu\n" );
-                        end = TRUE;
-                        break;
-                }
-
-
-            }
-            setScore(population[i], getScore(snake));
-            data[i] = getScore(snake);
-            destroySnake(snake);
-        }
-        calculateFitness(population);
-
-        /*
-        for( int i = 0; i < TAILLE_POPULATION; i++){
-            printNetwork(population[i]);
-        }
-        */
-        //printf("\n\n\n\n%d\n",j );
-
-        /*
-        for( int i = 0; i < TAILLE_POPULATION; i++){
-            //printNetwork(population[i]);
-            fitnessClassement[i] = population[i]->fitness;
-
-            printf("score n %d : %lf\n",i,data[i] );
-            printf("fitness n %d : %lf\n",i,fitnessClassement[i] );
-            printf("id : %d \n",population[i]->id);
-            //printNetwork(population[i]);
-        }
-        */
-        /*
-        printf("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n" );
-        printf("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n" );
-        printf("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n" );
-        */
-
-
-        population = fuck(population);
-
-
-        //for( int i = 0; i < TAILLE_POPULATION; i++){
-            //printNetwork(population[i]);
-        //}
-        //getchar();
-
-
-
-    }
-    /*
-    for( int i = 0; i < TAILLE_POPULATION; i++){
-        printNetwork(population[i]);
-    }*/
-/*
-    for( int i = 0; i < TAILLE_POPULATION; i++){
-        printf("score nn %d : %lf\n",i, (population[i])->score);
-
-    }
-*/
-    destroyPopulation(population);
-    free(data);
-    free(fitnessClassement);
-
-    return 0;
 }
 
+//
+void afficherJeu(int resultat ){
+    afficheGrille();
+    switch (resultat) {
+        case 0:
+            printf(">haut\n" );
+            break;
+        case 1:
+            printf(">Bas\n" );
+            break;
+        case 2:
+            printf(">gauche\n" );
+            break;
+        case 3:
+            printf(">droite\n" );
+            break;
+        default:
+            break;
+        }
+}
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-int main(/*int argc, char *argv[]*/) {
-
-/*    if(argc < 2 ){
-        printf("nb arg: %d\n", argc );
-        printf("Veuillez mettre le nom du fichier de log\n");
-        exit(1);
-        printf("%s\n",argv[1] );
-    }*/
-    srand(time(NULL));
-
-
-    FILE* fileScore = openLog("score/score.csv");
-    FILE* fileId = openLog("score/id.csv");
-
-    /*
-    // création de la population
-    NeuralNetwork ** population = malloc(TAILLE_POPULATION * sizeof(NeuralNetwork));
+//
+void afficherInfo(NeuralNetwork ** population ){
     for( int i = 0; i < TAILLE_POPULATION; i++){
-        population[i] = malloc( sizeof(NeuralNetwork));
-        initNeuralNetwork(population[i], NB_INPUT, NB_HIDDEN_LAYER, NB_NEURONS_HIDDEN, NB_NEURONS_OUTPUT);
-        initWeigth(population[i]);
+        printf("id: %d - score: %lf - fitness: %lf\n", population[i]->id, population[i]->rawScore, population[i]->fitness );
+        //printf("fitness n %d : %lf\n",i,population[i]->fitness );
+        //printf("id : %d \n",population[i]->id);
+        //printNetwork(population[i]);
+    }
+}
+
+void jump(int a){
+    for( int i = 0; i < a; i++){
+        printf("\n");
     }
 
-    double gen = 0;
-    while(gen != 100){
-        for( int i = 0; i < TAILLE_POPULATION; i++){
+}
+
+//
+void playBest( NeuralNetwork ** population ){
+    NeuralNetwork * nn;
+    nn = bestElement( population );
+
+    Snake * snake ;
+
+    int resultat = 4;
+    Boolean end = FALSE;
+    jump(10);
+    printf("score : %lf\n", nn->rawScore );
+    printf("pomme : %lf\n", nn->nbFruit );
+    printf("fitness : %lf\n", nn->fitness );
+    jump(10);
+
+
+    // Init snake
+    end = FALSE;
+    initialiseGrille();
+    snake = malloc(sizeof(Snake));
+    initSnake(snake);
+    //
+    int try = 0;
+    while (end == FALSE && try<1000) {
+        setInput(nn, getInput(snake, NB_INPUT));
+        compute(nn);
+        resultat = result(nn);
+
+        //                      Affichage
+        jump(10);
+        //printNetwork(nn);
+        afficherData(nn);
+        afficherJeu(resultat);
+        printf(">\n");
+        getchar();
+
+        switch (resultat) {
+            case 0:
+                end = move(snake, -1, 0);
+                break;
+            case 1:
+                end = move(snake, 1, 0);
+                break;
+            case 2:
+                end = move(snake, 0, -1);
+                break;
+            case 3:
+                end = move(snake, 0, 1);
+                break;
+            default:
+                //break;
+                //printf("fin du jeu\n" );
+                printf("%d\n", resultat );
+                exit(0);
+                end = TRUE;
+                break;
         }
-        gen+=1;
+        try += 1;
 
+    }
 
+}
+
+//
+NeuralNetwork ** play( NeuralNetwork ** population , int printBest ){
+    Snake * snake ;
+
+    int resultat = 4;
+    Boolean end = FALSE;
+
+    for( int i = 0; i < TAILLE_POPULATION; i++){
+
+        // Init snake
+        end = FALSE;
+        initialiseGrille();
+        snake = malloc(sizeof(Snake));
+        initSnake(snake);
+        //
+        int try = 0;
+        while (end == FALSE && try<1000) {
+            if(/*try > 100*/getScore(snake) != try+1){
+                //printf("%d try! score: %lf \n",try,getScore(snake) );
+            }
+            setInput(population[i], getInput(snake, NB_INPUT));
+            compute(population[i]);
+            resultat = result(population[i]);
+
+            //                      Affichage
+            //jump(10);
+            //printNetwork(population[i]);
+            //afficherData(population[i]);
+            //afficherJeu(resultat);
+            //printf(">\n");
+            //getchar();
+
+            switch (resultat) {
+                case 0:
+                    end = move(snake, -1, 0);
+                    break;
+                case 1:
+                    end = move(snake, 1, 0);
+                    break;
+                case 2:
+                    end = move(snake, 0, -1);
+                    break;
+                case 3:
+                    end = move(snake, 0, 1);
+                    break;
+                default:
+                    //break;
+                    //printf("fin du jeu\n" );
+                    printf("%d\n", resultat );
+                    exit(0);
+                    end = TRUE;
+                    break;
+            }
+            try += 1;
+        }
+        setScore(population[i], getScore(snake), getFruit(snake));
+        destroySnake(snake);
     }
 
     calculateFitness(population);
-    destroyPopulation(population);
-    return 0;*/
-    /*
-    NeuralNetwork nn;
 
-    //nbInput, nbHiddenLayer, nbNeuronsHidden, nbNeuronsOutput
-    //initNeuralNetwork(&nn, 10, 2, 9, 9);
-        initWeigth(&nn);
-    compute(&nn);
-    printNetwork(&nn);
-    unsigned long long resultat = result(&nn);
-    printf("%llu\n", resultat );
-*/
 
-    //Snake init
-    Snake * snake ;
-    int resultat = 4;
-    Boolean end = FALSE;
-    //
+    //                                  Log
+    writeLogScore(fileScore, population); // log score
+    writeLogId(fileId, population);
+    writeLogFruit(fileFruit, population);
+
+
+    //                                  Affichage
+    //printPopulaton(population);
+    //afficherInfo( population);
+    //printf(">\n");
+    //getchar();
+
+    if(printBest == 1)
+        playBest(population);
+
+
+    population = fuck(population);
+
+    return population;
+}
+
+//
+int main() {
+
+    initGlobalVar();
+
+    srand(time(NULL));
+
+    fileScore = openLog("score/score.csv");
+    fileId = openLog("score/id.csv");
+    fileFruit = openLog("score/fruit.csv");
 
     //Init nn
     NeuralNetwork ** population = malloc(TAILLE_POPULATION * sizeof(NeuralNetwork));
     double * data = malloc(TAILLE_POPULATION * sizeof(double)); //data
     double * fitnessClassement = malloc(TAILLE_POPULATION * sizeof(double)); //data
 
-    for( int i = 0; i < TAILLE_POPULATION; i++){
-        population[i] = malloc( sizeof(NeuralNetwork));
-        initNeuralNetwork(population[i], NB_INPUT, NB_HIDDEN_LAYER, NB_NEURONS_HIDDEN, NB_NEURONS_OUTPUT);
-        initWeigth(population[i]);
-        data[i] = 0;
-        fitnessClassement[i] = 0;
-        population[i]->id = i;
-    }
+    initGame(population, data, fitnessClassement );
 
-    //data
-    for(int k = 0; k < 1; k++){
-        for( int j = 0; j < 3000; j++){
-            printf("%d\n",j );
-            for( int i = 0; i < TAILLE_POPULATION; i++){
-                //population[i]
+    for( int j = 0; j < 3000; j++){
 
-                // Init snake
-                end = FALSE;
-                initialiseGrille();
-                snake = malloc(sizeof(Snake));
-                initSnake(snake);
-                //
-                //printf("--------------------------------------------\nNeuralNetwork num: %d",i );
-                while (end == FALSE) {
+        if(j%500 == 0)
+            population = play(  population, 1 );
+        else
+            population = play(  population, 0 );
 
-                    //afficheGrille();
-                    setInput(population[i], getInput(snake, NB_INPUT));
-                    compute(population[i]);
-                    resultat = result(population[i]);
-                    //printNetwork(population[i]);
-                    /*
-                    switch (resultat) {
-                        case 0:
-                            printf(">haut\n" );
-                            break;
-                        case 1:
-                            printf(">Bas\n" );
-                            break;
-                        case 2:
-                            printf(">gauche\n" );
-                            break;
-                        case 3:
-                            printf(">droite\n" );
-                            break;
-                        default:
-                            break;
-                    }
-                    */
-                    switch (resultat) {
-                        case 0:
-                            end = move(snake, -1, 0);
-                            break;
-                        case 1:
-                            end = move(snake, 1, 0);
-                            break;
-                        case 2:
-                            end = move(snake, 0, -1);
-                            break;
-                        case 3:
-                            end = move(snake, 0, 1);
-                            break;
-                        default:
-                            break;
-                            printf("fin du jeu\n" );
-                            end = TRUE;
-                            break;
-                    }
-
-
-                }
-                setScore(population[i], getScore(snake));
-                data[i] = getScore(snake);
-                destroySnake(snake);
-            }
-            calculateFitness(population);
-
-
-            for( int i = 0; i < TAILLE_POPULATION; i++){
-                //printNetwork(population[i]);
-            }
-
-            //printf("\n\n\n\n%d\n",j );
-
-            /*
-            for( int i = 0; i < TAILLE_POPULATION; i++){
-                //printNetwork(population[i]);
-                fitnessClassement[i] = population[i]->fitness;
-
-                printf("score n %d : %lf\n",i,data[i] );
-                printf("fitness n %d : %lf\n",i,fitnessClassement[i] );
-                printf("id : %d \n",population[i]->id);
-                //printNetwork(population[i]);
-            }
-            */
-            /*
-            printf("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n" );
-            printf("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n" );
-            printf("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n" );
-            */
-
-
-                        writeLogScore(fileScore, population);
-                        writeLogId(fileId, population);
-            //if(j != 49)
-            population = fuck(population);
-
-
-            //for( int i = 0; i < TAILLE_POPULATION; i++){
-                //printNetwork(population[i]);
-            //}
-            //getchar();
-
+        if(j%10 == 0){
+            printf("gen: %d\n", j );
         }
 
-        printf("%dk\n",k );
-        population = fuck(population);
-    }
-
-/*
-    for( int i = 0; i < TAILLE_POPULATION; i++){
-        printf("score nn %d : %lf\n",i, (population[i])->score);
 
     }
-*/
+
+
+    //destruction
     destroyPopulation(population);
     free(data);
     free(fitnessClassement);
     fclose(fileScore);
     fclose(fileId);
-    //free(file);
+    fclose(fileFruit);
     return 0;
 }
 

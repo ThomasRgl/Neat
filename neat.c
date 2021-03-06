@@ -24,13 +24,54 @@ struct NeatNeuralNetwork
 };*/
 
 //
+void initGlobalVar(){
+    if( NB_HIDDEN_LAYER == 0 ){
+        TOTAL_WEIGHT = ( NB_INPUT + 1 ) * NB_NEURONS_OUTPUT;
+    }
+    else{
+        TOTAL_WEIGHT = ( NB_INPUT + 1 ) * NB_NEURONS_HIDDEN;
+        for ( int i = 1; i < NB_NEURONS_HIDDEN; i ++)
+            TOTAL_WEIGHT =  ( NB_NEURONS_HIDDEN + 1 ) * NB_NEURONS_HIDDEN;
+        TOTAL_WEIGHT += ( NB_NEURONS_HIDDEN + 1 ) * NB_NEURONS_OUTPUT;
+
+    }
+
+    TAILLE_CROSSOVER_MAX = (TOTAL_WEIGHT * CROSSOVER_PERCENT ) / 100;
+
+    inputChar[0] = "distance Fruit verticale";
+    inputChar[1] = "distance Fruit horizontale";
+    inputChar[1] = "haut";
+    inputChar[2] = "bas";
+    inputChar[3] = "gauche";
+    inputChar[4] = "droite";
+
+    outputChar[0] = "haut";
+    outputChar[1] = "bas";
+    outputChar[2] = "gauche";
+    outputChar[3] = "droite";
+
+
+
+    printf("tailleCrossover : %d \n", TAILLE_CROSSOVER_MAX );
+    printf("total_weight : %d \n", TOTAL_WEIGHT );
+
+}
+
+//
 double sigmoid(double x){
-    return 1 / (1 + exp(-x) );
+    //return 1 / (1 + exp(-x) ); //default sigmoid
+    return 1 / (1 + exp(-x) ) - 0.5;
+    //return ((1 / (1 + exp(-(x-5)*0.6)) -0.5)*2); //renvoi un nombre entre -1 et 1
 }
 
 //
 double d_sigmoid(double x){
     return x * (1 - x);
+}
+
+double newSigmoid(double x){
+    //return 1 / (1 + exp(-(x-7)*0.6) ); // renvoi un nombre entre 0 et 1
+    return ((1 / (1 + exp(-(x-5)*0.6)) -0.5)*2); //renvoi un nombre entre -1 et 1
 }
 
 //
@@ -76,7 +117,7 @@ unsigned long long result( NeuralNetwork * nn ){
 
     //
     unsigned long long index;
-    double max = 0;
+    double max = -1;
     for(unsigned long long  i = 0; i < layer->length; i++){
         if(max <= layer->neurons[i]){
             max = layer->neurons[i];
@@ -118,9 +159,10 @@ void setInput(NeuralNetwork * nn, double * inputList){
     layer = nn->firstLayer;
 
     //printf("%llu\n",layer->length );
-    for( unsigned long long i = 0; i < layer->length; i++ )
-        (layer->neurons)[i] = inputList[i];
-
+    for( unsigned long long i = 0; i < layer->length; i++ ){
+        //(layer->neurons)[i] = inputList[i]; //input par default
+        (layer->neurons)[i] = newSigmoid(inputList[i]); //transforme l'input en un chiffre entre 0 et 1
+    }
     //Test
     //for( unsigned long long i = 0; i < layer->length; i++ )
     //    printf("input num %llu : %lf\n", i, (layer->neurons)[i]);
@@ -178,6 +220,51 @@ void printNetwork(NeuralNetwork * nn){
     }
 
     return;
+}
+
+//
+void printPopulaton(NeuralNetwork ** population){
+    for( int i = 0; i < TAILLE_POPULATION; i++){
+        printNetwork(population[i]);
+    }
+}
+
+//
+void afficherData(NeuralNetwork * nn){
+    Layer * layer = NULL;
+    layer = nn->firstLayer;
+
+    if(inputChar != NULL){
+        for(int i = 0; i < NB_INPUT; i++){
+            printf("%s : %lf\n",inputChar[i], layer->neurons[i] );
+        }
+    }
+    else{
+        for(int i = 0; i < NB_INPUT; i++){
+            printf("input %d : %lf\n",i , layer->neurons[i] );
+        }
+    }
+
+    layer = layer->nextLayer;
+    printf("\n\n\n" );
+    while(layer->nextLayer){
+        for(int i = 0; i < NB_NEURONS_HIDDEN; i++){
+            printf("neurons  %d : %lf\n",i , layer->neurons[i] );
+        }
+        layer = layer->nextLayer;
+        printf("\n\n\n" );
+    }
+
+    if(outputChar != NULL){
+        for(int i = 0; i < NB_NEURONS_OUTPUT; i++){
+            printf("%s : %lf\n",outputChar[i], layer->neurons[i] );
+        }
+    }
+    else{
+        for(int i = 0; i < NB_NEURONS_OUTPUT; i++){
+            printf("ouput %d : %lf\n",i , layer->neurons[i] );
+        }
+    }
 }
 
 //
@@ -267,19 +354,26 @@ void initNeuralNetwork(NeuralNetwork * nn, unsigned long long nbInput, unsigned 
 //
 NeuralNetwork ** fuck(NeuralNetwork ** population){
 
-
     NeuralNetwork ** newPopulation = malloc(TAILLE_POPULATION * sizeof(NeuralNetwork));
+
+    NeuralNetwork * a;
+    NeuralNetwork * b;
 
     for( int i = 0; i < TAILLE_POPULATION; i++){
 
+        a = pickOne(population);
+        b = pickOne(population);
+        newPopulation[i] = crossover(a, b);
+        mutate(newPopulation[i]);
         //newPopulation[i] = malloc( sizeof(NeuralNetwork));
         //newPopulation[i] = malloc( sizeof(NeuralNetwork));
-        newPopulation[i] = pickOne(population);
+        //newPopulation[i] = pickOne(population);
+
     }
     destroyPopulation(population);
     return newPopulation;
 }
-
+/*
 //
 NeuralNetwork * pickOne(NeuralNetwork ** population){
 
@@ -299,6 +393,67 @@ NeuralNetwork * pickOne(NeuralNetwork ** population){
     nn->id = population[index]->id;
     return nn;
 
+}*/
+//
+NeuralNetwork * pickOne(NeuralNetwork ** population){
+
+    int index = 0;
+    double r = (double) rand()/ (double) RAND_MAX;
+    while ( r > 0) {
+        r = r - (population[index])->fitness;
+
+        index += 1;
+    }
+
+    index -= 1;
+    return population[index] ;
+}
+//
+NeuralNetwork * crossover(NeuralNetwork * a, NeuralNetwork * b){
+
+    int remainingToLocation = ((double) rand()/ (double) RAND_MAX )*(TOTAL_WEIGHT-TAILLE_CROSSOVER_MAX);
+    int crossoverRemaining = TAILLE_CROSSOVER_MAX;
+
+    NeuralNetwork * nn = malloc( sizeof(NeuralNetwork) );
+
+    if(! nn) exit(EXIT_FAILURE);
+
+    initNeuralNetwork(nn, NB_INPUT, NB_HIDDEN_LAYER, NB_NEURONS_HIDDEN, NB_NEURONS_OUTPUT);
+
+    Layer * layerA = a->firstLayer->nextLayer;
+    Layer * layerB = b->firstLayer->nextLayer;
+    Layer * layer = nn->firstLayer->nextLayer;
+
+    while(layer){
+        for (unsigned long long i = 0; i < layer->length ; i++) {
+            if( crossoverRemaining == 0 || remainingToLocation != 0){
+                (layer->bias)[i] = (layerA->bias)[i];
+                remainingToLocation -= 1;
+            }
+            else {
+                (layer->bias)[i] = (layerB->bias)[i];
+                crossoverRemaining -= 1;
+            }
+
+            for (unsigned long long j = 0; j < layer->previousLayer->length; j++ ){
+
+                if( crossoverRemaining == 0 || remainingToLocation != 0){
+                    (layer->w)[i][j] = (layerA->w)[i][j];
+                    remainingToLocation -= 1;
+                }
+                else {
+                    (layer->w)[i][j] = (layerB->w)[i][j];
+                    crossoverRemaining -= 1;
+                }
+            }
+        }
+        layer = layer->nextLayer;
+        layerA = layerA->nextLayer;
+        layerB = layerB->nextLayer;
+
+    }
+    nn->id = a->id;
+    return nn;
 }
 
 //
@@ -375,12 +530,12 @@ void mutate( NeuralNetwork * nn ){
             for (unsigned long long j = 0; j < layer->previousLayer->length; j++ ){
                 if( MUTATION_RATE > (double) rand()/RAND_MAX){ (layer->w)[i][j] += normalRandom()*0.2;}
             }
-            /*
-            if( MUTATION_RATE > (double) rand()/RAND_MAX){ (layer->bias)[i] = (double) rand()/RAND_MAX;}
 
-            for (unsigned long long j = 0; j < layer->previousLayer->length; j++ ){
-                if( MUTATION_RATE > (double) rand()/RAND_MAX){ (layer->w)[i][j] = (double) rand()/RAND_MAX;}
-            }*/
+            // if( MUTATION_RATE > (double) rand()/RAND_MAX){ (layer->bias)[i] = (double) rand()/RAND_MAX;}
+            //
+            // for (unsigned long long j = 0; j < layer->previousLayer->length; j++ ){
+            //     if( MUTATION_RATE > (double) rand()/RAND_MAX){ (layer->w)[i][j] = (double) rand()/RAND_MAX;}
+            // }
         }
         layer = layer->nextLayer;
     }
@@ -388,10 +543,28 @@ void mutate( NeuralNetwork * nn ){
     return;
 }
 
-void setScore(NeuralNetwork * nn, double score){
+NeuralNetwork * bestElement(NeuralNetwork ** population){
+    double BestScore = 0;
+    int  index = 0;
+    for( int i = 0; i < TAILLE_POPULATION; i++){
+        if(population[i]->rawScore > BestScore){
+            index = i;
+            BestScore = population[i]->rawScore;
+        }
+
+    }
+
+    return population[index];
+}
+
+
+void setScore(NeuralNetwork * nn, double score, double nbFruit){
     //nn->score = score;
+    //nn->score = score*score;
     nn->score = exp(score);
     nn->rawScore = score;
+
+    nn->nbFruit = nbFruit;
     return;
 }
 
@@ -404,6 +577,7 @@ void destroyPopulation( NeuralNetwork ** population ){
 }
 
 void destroyNetwork(NeuralNetwork * nn){
+
 
     Layer * layer = NULL;
     layer = nn->lastLayer;
@@ -446,12 +620,12 @@ FILE* openLog( char *fileName ){
 
     if( file != NULL){
         fseek(file, 0, SEEK_END);
-        printf("%ld\n", ftell(file) );
+        //printf("%ld\n", ftell(file) );
 
         if( ftell(file) != 0 ){
             printf("le fichier n'est pas vide !\n" );
-            fclose( file );
-            exit(1);
+            //fclose( file );
+            //exit(1);
         }
         fclose( file );
     }
@@ -478,6 +652,19 @@ void writeLogId ( FILE* file,  NeuralNetwork ** population ){
     }
     fputc('\n', file);
 }
+
+void writeLogFruit ( FILE* file,  NeuralNetwork ** population ){
+
+    for( int i = 0; i < TAILLE_POPULATION; i++){
+
+        fprintf( file, "%lf,",population[i]->nbFruit);
+        //fprintf( file, "%lf,",population[i]->score);
+        //fprintf( file, "%lf,",population[i]->fitness);
+    }
+    fputc('\n', file);
+}
+
+
 
 void closeLog( FILE* file){
     fclose( file );

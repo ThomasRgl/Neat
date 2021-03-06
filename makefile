@@ -2,7 +2,8 @@ GCC=gcc
 
 CFLAGS=-g
 
-OFLAGS=-g -Wall -Werror -Wextra
+OFLAGS2=-g -Wall -Werror -Wextra
+OFLAGS=-g -Wall  -Wextra
 OLD = -O3 -finline-functions -funroll-loops -march=native -mtune=native -flto
 OLD_OFLAGS = -I/usr/include
 

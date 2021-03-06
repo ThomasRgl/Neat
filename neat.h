@@ -1,20 +1,28 @@
 #ifndef NEAT_H
     #define NEAT_H
 
-    #define TAILLE_POPULATION 200
-    #define CROSSOVER_NUMBER 100
-    #define NB_INPUT 4
+    #define TAILLE_POPULATION 400
+    //#define CROSSOVER_NUMBER 100
+    #define NB_INPUT 6
     #define NB_HIDDEN_LAYER 1
     #define NB_NEURONS_HIDDEN 4
     #define NB_NEURONS_OUTPUT 4
-    #define MUTATION_RATE 0.1
-    #define SIGMA_MUTATION 0.1
-    #define SIGMA_CROSSOVER 1
-    #define CROSSOVER_PERCENT 10
+    #define MUTATION_RATE 0.15
+    #define SIGMA_MUTATION 0.3
+    //#define SIGMA_CROSSOVER 1
+    #define CROSSOVER_PERCENT 30
 
-    int tailleCrossover = (TAILLE_POPULATION * CROSSOVER_PERCENT ) / 100
-    int total_weight ; 
+    int TAILLE_CROSSOVER_MAX ;//10 //= (TAILLE_POPULATION * CROSSOVER_PERCENT ) / 100;
+    int TOTAL_WEIGHT ; //40
     //
+
+    char *inputChar[6];// = {"haut","bas","gauche","droite"};
+    char *outputChar[4];
+
+    FILE* fileScore;
+    FILE* fileId;
+    FILE* fileFruit;
+
     typedef struct Layer
     {
         double * neurons;
@@ -39,6 +47,7 @@
         //double * expectedOutput;
         double score;
         double rawScore;
+        double nbFruit;
         double fitness;
         int id;
         struct Layer * firstLayer;
@@ -46,7 +55,9 @@
     }NeuralNetwork;
 
     /*prototype*/
+    void initGlobalVar();
     double sigmoid(double x);
+    double newSigmoid(double x);
     double d_sigmoid(double x);
     double rand_gen();
     double normalRandom();
@@ -55,6 +66,8 @@
     void compute(NeuralNetwork * nn);
     void setInput(NeuralNetwork * nn, double * inputList);
     void printNetwork(NeuralNetwork * nn);
+    void printPopulaton(NeuralNetwork ** population);
+    void afficherData(NeuralNetwork * nn);
     void initWeigth(NeuralNetwork * nn);
     //void initEmptyWeigth(NeuralNetwork * nn);
     void initLayer(NeuralNetwork * nn, unsigned long long taille );
@@ -64,10 +77,12 @@
     void copy(NeuralNetwork * NewNn,  NeuralNetwork * nn );
     NeuralNetwork ** fuck(NeuralNetwork ** population);
     NeuralNetwork *  pickOne(NeuralNetwork ** population);
+    NeuralNetwork * crossover(NeuralNetwork * a, NeuralNetwork * b);
     void calculateFitness(NeuralNetwork ** population);
     //void copy( NeuralNetwork * nn );
     void mutate( NeuralNetwork * nn );
-    void setScore(NeuralNetwork * nn, double score);
+    NeuralNetwork * bestElement(NeuralNetwork ** population);
+    void setScore(NeuralNetwork * nn, double score, double nbFruit);
     void destroyPopulation(NeuralNetwork ** population);
     void destroyNetwork(NeuralNetwork * nn);
     void destroyLayer(Layer * layer);
@@ -75,5 +90,6 @@
     FILE* openLog( char *fileName );
     void writeLogScore ( FILE* fichier,  NeuralNetwork ** population );
     void writeLogId ( FILE* fichier,  NeuralNetwork ** population );
+    void writeLogFruit( FILE* fichier,  NeuralNetwork ** population );
     void closeLog( FILE* fichier);
 #endif

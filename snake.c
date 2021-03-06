@@ -13,39 +13,39 @@ double * getInput( Snake * snake, int nbInput) {
     int ligneHead = snake->head->ligne;
     int colonneHead = snake->head->colonne;
 
-    //int ligneFruit = snake->fruit->ligne;
-    //int colonneFruit = snake->fruit->colonne;
+    int ligneFruit = snake->fruit->ligne;
+    int colonneFruit = snake->fruit->colonne;
 
-    //inputList[0] = ligneFruit - ligneHead;
-    //inputList[1] = colonneFruit - colonneHead ;
+    inputList[0] = ligneFruit - ligneHead;
+    inputList[1] = colonneFruit - colonneHead ;
 
     //case dispo haut
     int index = 1;
     while( (ligneHead - index)>=0 && grille[ligneHead - index][colonneHead] != SNAKE ){
         index+=1;
     }
-    inputList[0] = index-1;
+    inputList[2] = index-1;
 
     //case dispo bas
     index = 1;
     while( (ligneHead + index) < NB_LIG && grille[ligneHead + index][colonneHead] != SNAKE ){
         index+=1;
     }
-    inputList[1] =  index-1;
+    inputList[3] =  index-1;
 
     //case dispo gauche
     index = 1;
     while( (colonneHead - index)>=0 && grille[ligneHead][colonneHead - index] != SNAKE ){
         index+=1;
     }
-    inputList[2] = index-1;
+    inputList[4] = index-1;
 
     //case dispo droite
     index = 1;
     while( (colonneHead + index) < NB_COL && grille[ligneHead][colonneHead + index] != SNAKE ){
         index+=1;
     }
-    inputList[3] =  index-1;
+    inputList[5] =  index-1;
     /*
     for(int i = 0; i < NB_LIG; i++){
         for(int j = 0; j < NB_COL; j++){
@@ -79,7 +79,7 @@ void initialiseGrille() {
  */
 void afficheGrille() {
     int i, j;
-    printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" );
+    //printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" );
     for (i=0; i<NB_LIG; i++) {
         for (j=0; j<NB_COL; j++) {
             switch (grille[i][j]) {
@@ -114,6 +114,7 @@ void initSnake( Snake * snake){
     generateFruit(snake);
 
     snake->score = 1;
+    snake->nbFruit = 0;
 }
 
 //
@@ -190,7 +191,8 @@ Boolean move(Snake * snake, int i, int j){
 
     if( val == FRUIT){
         generateFruit(snake);
-        //snake->score += 4;
+        snake->score += 10;
+        snake->nbFruit += 1;
     }
 
 
@@ -221,6 +223,10 @@ void destroySnake( Snake * snake ){
 
 double getScore(Snake * snake){
     return snake->score;
+}
+
+double getFruit(Snake * snake){
+    return snake->nbFruit;
 }
 /*
 int main(int argc, char const *argv[]) {
