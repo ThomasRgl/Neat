@@ -543,11 +543,13 @@ void mutate( NeuralNetwork * nn ){
     return;
 }
 
-void setScore(NeuralNetwork * nn, double score){
+void setScore(NeuralNetwork * nn, double score, double nbFruit){
     //nn->score = score;
     //nn->score = score*score;
     nn->score = exp(score);
     nn->rawScore = score;
+
+    nn->nbFruit = nbFruit;
     return;
 }
 
@@ -635,6 +637,19 @@ void writeLogId ( FILE* file,  NeuralNetwork ** population ){
     }
     fputc('\n', file);
 }
+
+void writeLogFruit ( FILE* file,  NeuralNetwork ** population ){
+
+    for( int i = 0; i < TAILLE_POPULATION; i++){
+
+        fprintf( file, "%lf,",population[i]->nbFruit);
+        //fprintf( file, "%lf,",population[i]->score);
+        //fprintf( file, "%lf,",population[i]->fitness);
+    }
+    fputc('\n', file);
+}
+
+
 
 void closeLog( FILE* file){
     fclose( file );

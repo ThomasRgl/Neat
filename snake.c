@@ -114,6 +114,7 @@ void initSnake( Snake * snake){
     generateFruit(snake);
 
     snake->score = 1;
+    snake->nbFruit = 0;
 }
 
 //
@@ -191,6 +192,7 @@ Boolean move(Snake * snake, int i, int j){
     if( val == FRUIT){
         generateFruit(snake);
         snake->score += 10;
+        snake->nbFruit += 1;
     }
 
 
@@ -221,6 +223,10 @@ void destroySnake( Snake * snake ){
 
 double getScore(Snake * snake){
     return snake->score;
+}
+
+double getFruit(Snake * snake){
+    return snake->nbFruit;
 }
 /*
 int main(int argc, char const *argv[]) {

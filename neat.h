@@ -21,6 +21,7 @@
 
     FILE* fileScore;
     FILE* fileId;
+    FILE* fileFruit;
 
     typedef struct Layer
     {
@@ -46,6 +47,7 @@
         //double * expectedOutput;
         double score;
         double rawScore;
+        double nbFruit;
         double fitness;
         int id;
         struct Layer * firstLayer;
@@ -79,7 +81,7 @@
     void calculateFitness(NeuralNetwork ** population);
     //void copy( NeuralNetwork * nn );
     void mutate( NeuralNetwork * nn );
-    void setScore(NeuralNetwork * nn, double score);
+    void setScore(NeuralNetwork * nn, double score, double nbFruit);
     void destroyPopulation(NeuralNetwork ** population);
     void destroyNetwork(NeuralNetwork * nn);
     void destroyLayer(Layer * layer);
@@ -87,5 +89,6 @@
     FILE* openLog( char *fileName );
     void writeLogScore ( FILE* fichier,  NeuralNetwork ** population );
     void writeLogId ( FILE* fichier,  NeuralNetwork ** population );
+    void writeLogFruit( FILE* fichier,  NeuralNetwork ** population );
     void closeLog( FILE* fichier);
 #endif
