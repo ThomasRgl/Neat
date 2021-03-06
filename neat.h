@@ -58,6 +58,7 @@
     void initGlobalVar();
     double sigmoid(double x);
     double newSigmoid(double x);
+    double newSigmoid2(double x);
     double d_sigmoid(double x);
     double rand_gen();
     double normalRandom();

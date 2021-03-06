@@ -40,10 +40,10 @@ void initGlobalVar(){
 
     inputChar[0] = "distance Fruit verticale";
     inputChar[1] = "distance Fruit horizontale";
-    inputChar[1] = "haut";
-    inputChar[2] = "bas";
-    inputChar[3] = "gauche";
-    inputChar[4] = "droite";
+    inputChar[2] = "haut";
+    inputChar[3] = "bas";
+    inputChar[4] = "gauche";
+    inputChar[5] = "droite";
 
     outputChar[0] = "haut";
     outputChar[1] = "bas";
@@ -72,6 +72,12 @@ double d_sigmoid(double x){
 double newSigmoid(double x){
     //return 1 / (1 + exp(-(x-7)*0.6) ); // renvoi un nombre entre 0 et 1
     return ((1 / (1 + exp(-(x-5)*0.6)) -0.5)*2); //renvoi un nombre entre -1 et 1
+}
+
+double newSigmoid2(double x){
+    //return 1 / (1 + exp(-(x-7)*0.6) ); // renvoi un nombre entre 0 et 1
+    // return ((1 / (1 + exp(-(x)*0.6)) -0.5)*2); //renvoi un nombre entre -1 et 1
+    return ((1 / (1 + exp(-(x)*0.4)) -0.5)*2);  // renvoie un nombre en -1 et 1 pour [-10 10 ]
 }
 
 //
@@ -163,6 +169,8 @@ void setInput(NeuralNetwork * nn, double * inputList){
         //(layer->neurons)[i] = inputList[i]; //input par default
         (layer->neurons)[i] = newSigmoid(inputList[i]); //transforme l'input en un chiffre entre 0 et 1
     }
+    (layer->neurons)[0] = newSigmoid2(inputList[0]);
+    (layer->neurons)[1] = newSigmoid2(inputList[1]);
     //Test
     //for( unsigned long long i = 0; i < layer->length; i++ )
     //    printf("input num %llu : %lf\n", i, (layer->neurons)[i]);
