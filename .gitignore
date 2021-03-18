@@ -4,3 +4,4 @@ neatOld.c
 *.o
 neat
 score/*.csv
+note.txt
