@@ -38,28 +38,46 @@ void initGlobalVar(){
 
     TAILLE_CROSSOVER_MAX = (TOTAL_WEIGHT * CROSSOVER_PERCENT ) / 100;
 
-    inputChar[0] = "danger haut";
-    inputChar[1] = "danger bas";
-    inputChar[2] = "danger droite";
-    inputChar[3] = "danger gauche";
-    inputChar[4] = "fruit haut";
-    inputChar[5] = "fruit bas";
-    inputChar[6] = "fruit droite";
-    inputChar[7] = "fruit gauche";
-
-    inputChar[0] = "fruit vertical";
-    inputChar[1] = "fruit horizontale";
-    inputChar[2] = "haut";
-    inputChar[3] = "bas";
-    inputChar[4] = "gauche";
-    inputChar[5] = "droite";
-
+    // inputChar[0] = "danger haut";
+    // inputChar[1] = "danger bas";
+    // inputChar[2] = "danger droite";
+    // inputChar[3] = "danger gauche";
+    // inputChar[4] = "fruit haut";
+    // inputChar[5] = "fruit bas";
+    // inputChar[6] = "fruit droite";
+    // inputChar[7] = "fruit gauche";
+    //
+    // inputChar[0] = "fruit vertical";
+    // inputChar[1] = "fruit horizontale";
+    // inputChar[2] = "haut";
+    // inputChar[3] = "bas";
+    // inputChar[4] = "gauche";
+    // inputChar[5] = "droite";
+    //
     outputChar[0] = "haut";
     outputChar[1] = "bas";
     outputChar[2] = "gauche";
     outputChar[3] = "droite";
 
+    inputChar[0] = "Distance FRUIT";
 
+    inputChar[1] = "FRUIT HAUT";
+    inputChar[2] = "FRUIT BAS";
+    inputChar[3] = "FRUIT DROITE";
+    inputChar[4] = "FRUIT GAUCHE";
+    inputChar[5] = "FRUIT HAUT DROITE";
+    inputChar[6] = "FRUIT BAS DROITE";
+    inputChar[7] = "FRUIT HAUT GAUCHE";
+    inputChar[8] = "FRUIT BAS GAUCHE";
+
+    inputChar[9] = "SAFE HAUT";
+    inputChar[10] = "SAFE BAS";
+    inputChar[11] = "SAFE DROITE";
+    inputChar[12] = "SAFE GAUCHE";
+    inputChar[13] = "SAFE HAUT DROITE";
+    inputChar[14] = "SAFE BAS DROITE";
+    inputChar[16] = "SAFE HAUT GAUCHE";
+    inputChar[17] = "SAFE BAS GAUCHE";
 
     printf("tailleCrossover : %d \n", TAILLE_CROSSOVER_MAX );
     printf("total_weight : %d \n", TOTAL_WEIGHT );
@@ -383,6 +401,28 @@ NeuralNetwork ** fuck(NeuralNetwork ** population){
     NeuralNetwork * a;
     NeuralNetwork * b;
 
+    // int besti1 = -1;
+    // int besti2 = -1;
+    // double bestScore1 = -99;
+    // double bestScore2 = -99;
+    //
+    // for( int i = 0; i < TAILLE_POPULATION; i++){
+    //     if( bestScore1 < population[i]->score ){
+    //         bestScore2 = bestScore1;
+    //         bestScore1 = population[i]->score;
+    //         besti2 = besti1;
+    //         besti1 = i;
+    //     }
+    //     else if( bestScore2 < population[i]->score ){
+    //         bestScore2 = population[i]->score;
+    //         besti2 = i;
+    //     }
+    //
+    // }
+    //
+    // a = population[besti1];
+    // b = population[besti2];
+
     for( int i = 0; i < TAILLE_POPULATION; i++){
 
         a = pickOne(population);
@@ -430,6 +470,9 @@ NeuralNetwork * pickOne(NeuralNetwork ** population){
     }
 
     index -= 1;
+
+
+
     return population[index] ;
 }
 //
@@ -549,17 +592,17 @@ void mutate( NeuralNetwork * nn ){
     while(layer){
         for (unsigned long long i = 0; i < layer->length ; i++) {
 
-            // if( MUTATION_RATE > (double) rand()/RAND_MAX){ (layer->bias)[i] += normalRandom()*0.2;}
-            //
-            // for (unsigned long long j = 0; j < layer->previousLayer->length; j++ ){
-            //     if( MUTATION_RATE > (double) rand()/RAND_MAX){ (layer->w)[i][j] += normalRandom()*0.2;}
-            // }
-
-            if( MUTATION_RATE > (double) rand()/RAND_MAX){ (layer->bias)[i] = 1 - ((double) rand()/RAND_MAX)*2 ;}
+            if( MUTATION_RATE > (double) rand()/RAND_MAX){ (layer->bias)[i] += normalRandom()*0.05;}
 
             for (unsigned long long j = 0; j < layer->previousLayer->length; j++ ){
-                if( MUTATION_RATE > (double) rand()/RAND_MAX){ (layer->w)[i][j] = 1 - ((double) rand()/RAND_MAX)*2 ;}
+                if( MUTATION_RATE > (double) rand()/RAND_MAX){ (layer->w)[i][j] += normalRandom()*0.05;}
             }
+
+            // if( MUTATION_RATE > (double) rand()/RAND_MAX){ (layer->bias)[i] = 1 - ((double) rand()/RAND_MAX)*2 ;}
+            //
+            // for (unsigned long long j = 0; j < layer->previousLayer->length; j++ ){
+            //     if( MUTATION_RATE > (double) rand()/RAND_MAX){ (layer->w)[i][j] = 1 - ((double) rand()/RAND_MAX)*2 ;}
+            // }
         }
         layer = layer->nextLayer;
     }
@@ -584,8 +627,8 @@ NeuralNetwork * bestElement(NeuralNetwork ** population){
 
 void setScore(NeuralNetwork * nn, double score, double nbFruit){
     //nn->score = score;
-    //nn->score = score*score;
-    nn->score = exp(score);
+    ynn->score = score*score;
+    //nn->score = exp(score);
     nn->rawScore = score;
 
     nn->nbFruit = nbFruit;

@@ -203,7 +203,16 @@ int main() {
     initGlobalVar();
 
     srand(time(NULL));
-
+    // double sum = 0;
+    // double r;
+    // for(int i = 0; i<1000;i++){
+    //     r = normalRandom()*0.05;
+    //     sum += r;
+    //     printf("%lf\n",r );
+    // }
+    // printf("sum : %lf\n", sum);
+    //
+    // exit(0);
     fileScore = openLog("score/score.csv");
     fileId = openLog("score/id.csv");
     fileFruit = openLog("score/fruit.csv");

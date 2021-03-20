@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "snake.h"
+#include <math.h>
+
 
 
 /* grille du morpion valeurs possibles VIDE, ROND ou CROIX */
@@ -123,6 +125,173 @@ double * getInput( Snake * snake, int nbInput) {
     //
     //
     // return inputList;
+    //                                                     input v4 : 8 input
+    double * inputList = malloc(nbInput * sizeof(double)) ;
+
+    //
+    int ligneHead = snake->head->ligne;
+    int colonneHead = snake->head->colonne;
+
+    //
+    int ligneFruit = snake->fruit->ligne;
+    int colonneFruit = snake->fruit->colonne;
+
+    //
+    int index = 0;
+
+
+    //                          DISTANCE FRUIT
+    inputList[0] = ((10 - sqrt( pow((ligneHead - ligneFruit),2) + pow((ligneHead - ligneFruit),2)) ) * 2 ) -10;
+
+
+    //                          FRUIT
+    //
+
+
+    // HAUT
+    if(colonneFruit == colonneHead && ligneFruit < ligneHead)
+        //index = ligneHead - ligneFruit;
+        index = 99;
+    else
+        index = -99;
+
+    inputList[1] = index;
+
+
+    // BAS
+    if(colonneFruit == colonneHead && ligneFruit > ligneHead)
+        //index = ligneHead - ligneFruit;
+        index = 99;
+    else
+        index = -99;
+
+    inputList[2] = index;
+
+
+    // DROITE
+    if(ligneFruit == ligneHead && colonneFruit > colonneHead)
+        //index = ligneHead - ligneFruit;
+        index = 99;
+    else
+        index = -99;
+
+    inputList[3] = index;
+
+
+    // GAUCHE
+    if(ligneFruit == ligneHead && colonneFruit < colonneHead)
+        //index = ligneHead - ligneFruit;
+        index = 99;
+    else
+        index = -99;
+
+    inputList[4] = index;
+
+
+    // HAUT DROITE
+    if( (colonneFruit - colonneHead) == (-(ligneFruit - ligneHead)) && (ligneFruit - ligneHead) < 0  )
+        //index = ligneHead - ligneFruit;
+        index = 99;
+    else
+        index = -99;
+
+    inputList[5] = index;
+
+
+    // BAS DROITE
+    if( (colonneFruit - colonneHead) == (-(ligneFruit - ligneHead)) && (ligneFruit - ligneHead) > 0  )
+        //index = ligneHead - ligneFruit;
+        index = 99;
+    else
+        index = -99;
+
+    inputList[6] = index;
+
+
+    // HAUT GAUCHE
+    if( (colonneFruit - colonneHead) == (ligneFruit - ligneHead) && (ligneFruit - ligneHead) < 0  )
+        //index = ligneHead - ligneFruit;
+        index = 99;
+    else
+        index = -99;
+
+    inputList[7] = index;
+
+
+    // BAS GAUCHE
+    if( (colonneFruit - colonneHead) == (ligneFruit - ligneHead) && (ligneFruit - ligneHead) > 0  )
+        //index = ligneHead - ligneFruit;
+        index = 99;
+    else
+        index = -99;
+
+    inputList[8] = index;
+
+
+    //                          SAFE ZONE
+    //HAUT
+    index = 1;
+    while( (ligneHead - index) >= 0 && grille[ligneHead - index][colonneHead] != SNAKE ){
+        index+=1;
+    }
+    inputList[9] = (index-1)*2 -10 ;
+
+
+    //BAS
+    index = 1;
+    while( (ligneHead + index) < NB_LIG && grille[ligneHead + index][colonneHead] != SNAKE ){
+        index+=1;
+    }
+    inputList[10] =  (index-1)*2 -10 ;
+
+
+    //DROITE
+    index = 1;
+    while( (colonneHead + index) < NB_COL && grille[ligneHead][colonneHead + index] != SNAKE ){
+        index+=1;
+    }
+    inputList[11] =  (index-1)*2 -10 ;
+
+
+    //GAUCHE
+    index = 1;
+    while( (colonneHead - index) >= 0 && grille[ligneHead][colonneHead - index] != SNAKE ){
+        index+=1;
+    }
+    inputList[12] = (index-1)*2 -10 ;
+
+
+    // //HAUT DROITE
+    // index = 1;
+    // while( (ligneHead - index) >= 0 && (colonneHead + index) < NB_COL && grille[ligneHead - index][colonneHead + index] != SNAKE ){
+    //     index+=1;
+    // }
+    // inputList[12] = (index-1)*2 -10 ;
+    //
+    //
+    // //BAS DROITE
+    // index = 1;
+    // while( (ligneHead + index) < NB_LIG && (colonneHead + index) < NB_COL && grille[ligneHead + index][colonneHead + index] != SNAKE ){
+    //     index+=1;
+    // }
+    // inputList[13] =  (index-1)*2 -10 ;
+    //
+    //
+    // //HAUT GAUCHE
+    // index = 1;
+    // while( (ligneHead - index) >= 0 && (colonneHead - index) >= 0  && grille[ligneHead - index][colonneHead - index] != SNAKE ){
+    //     index+=1;
+    // }
+    // inputList[14] = (index-1)*2 -10 ;
+    //
+    // //BAS GAUCHE
+    // index = 1;
+    // while( (ligneHead - index) < NB_LIG && (colonneHead - index) >= 0  && grille[ligneHead + index][colonneHead - index] != SNAKE ){
+    //     index+=1;
+    // }
+    // inputList[15] = (index-1)*2 -10 ;
+
+    return inputList;
 
 }
 /*
