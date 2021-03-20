@@ -627,7 +627,7 @@ NeuralNetwork * bestElement(NeuralNetwork ** population){
 
 void setScore(NeuralNetwork * nn, double score, double nbFruit){
     //nn->score = score;
-    ynn->score = score*score;
+    nn->score = score*score;
     //nn->score = exp(score);
     nn->rawScore = score;
 

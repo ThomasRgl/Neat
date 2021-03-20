@@ -3,8 +3,8 @@
 
     #define TAILLE_POPULATION 1000
     //#define CROSSOVER_NUMBER 100
-    #define NB_INPUT 13
-    #define NB_HIDDEN_LAYER 2
+    #define NB_INPUT 8
+    #define NB_HIDDEN_LAYER 1
     #define NB_NEURONS_HIDDEN 8
     #define NB_NEURONS_OUTPUT 4
     #define MUTATION_RATE 0.3

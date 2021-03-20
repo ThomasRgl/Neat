@@ -124,17 +124,17 @@ NeuralNetwork ** play( NeuralNetwork ** population , int printBest ){
     Snake * snake ;
 
     int resultat = 4;
-    Boolean end = FALSE;
+    int end = 0;
 
     for( int i = 0; i < TAILLE_POPULATION; i++){
 
         // Init snake
-        end = FALSE;
+        end = 0;
         initialiseGrille();
         snake = malloc(sizeof(Snake));
         initSnake(snake);
         //
-        while (end == FALSE && snake->health != 0) {
+        while (end == 0 && snake->health != 0) {
             setInput(population[i], getInput(snake, NB_INPUT));
             compute(population[i]);
             resultat = result(population[i]);
@@ -169,6 +169,12 @@ NeuralNetwork ** play( NeuralNetwork ** population , int printBest ){
                     break;
             }
         }
+        if(end == 2){
+            printf("I AM SO ZEREFH");
+            setScore(population[i], getScore(snake), getFruit(snake));
+            playBest(population);
+        }
+
         setScore(population[i], getScore(snake), getFruit(snake));
         destroySnake(snake);
     }
@@ -224,7 +230,7 @@ int main() {
 
     initGame(population, data, fitnessClassement );
 
-    for( int j = 0; j < 2001; j++){
+    for( int j = 0; j < 3000; j++){
 
         if(j%500 == 0)
             population = play(  population, 1 );

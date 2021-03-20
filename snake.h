@@ -45,10 +45,10 @@
     void initialiseGrille();
     void afficheGrille();
     void initSnake(Snake * snake );
-    void generateFruit(Snake * snake );
+    int generateFruit(Snake * snake );
     void deleteQueue(Snake * snake );
     void addHead(Snake * snake, int ligne, int colonne);
-    Boolean move(Snake * snake, int i, int j);
+    int move(Snake * snake, int i, int j);
     //void destroyBody(Body * body);
     double * getInput(Snake * snake, int nbInput);
 
