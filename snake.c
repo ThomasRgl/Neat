@@ -24,76 +24,105 @@ double * getInput( Snake * snake, int nbInput) {
     // while( (ligneHead - index)>=0 && grille[ligneHead - index][colonneHead] != SNAKE ){
     //     index+=1;
     // }
-    // inputList[2] = index-1;
+    // inputList[2] = (index-1)*2 -10 ;
     //
     // //case dispo bas
     // index = 1;
     // while( (ligneHead + index) < NB_LIG && grille[ligneHead + index][colonneHead] != SNAKE ){
     //     index+=1;
     // }
-    // inputList[3] =  index-1;
+    // inputList[3] =  (index-1)*2 -10 ;
     //
     // //case dispo gauche
     // index = 1;
     // while( (colonneHead - index)>=0 && grille[ligneHead][colonneHead - index] != SNAKE ){
     //     index+=1;
     // }
-    // inputList[4] = index-1;
+    // inputList[4] = (index-1)*2 -10 ;
     //
     // //case dispo droite
     // index = 1;
     // while( (colonneHead + index) < NB_COL && grille[ligneHead][colonneHead + index] != SNAKE ){
     //     index+=1;
     // }
-    // inputList[5] =  index-1;
+    // inputList[5] =  (index-1)*2 -10 ;
+    //
+    // return inputList;
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                     input v2 : 8 input
+    // double * inputList = malloc(nbInput * sizeof(double)) ;
+    //
+    // int ligneHead = snake->head->ligne;
+    // int colonneHead = snake->head->colonne;
+    //
+    // inputList[0] = -10 ; //Danger haut
+    // inputList[1] = -10 ; //Danger bas
+    // inputList[2] = -10 ; //Danger droite
+    // inputList[3] = -10 ; //Danger gauche
+    //
+    // if( !(ligneHead-1 >= 0) || grille[ligneHead-1][colonneHead] == SNAKE  )
+    //     inputList[0] = 10;
+    //
+    // if( !(ligneHead+1 < NB_LIG) || grille[ligneHead+1][colonneHead] == SNAKE  )
+    //     inputList[1] = 10;
+    //
+    // if( !(colonneHead+1 < NB_COL) || grille[ligneHead][colonneHead+1] == SNAKE  )
+    //     inputList[2] = 10;
+    //
+    // if( !(colonneHead-1 >= 0)  || grille[ligneHead][colonneHead-1] == SNAKE  )
+    //     inputList[3] = 10;
+    //
+    //
+    // //
+    // int ligneFruit = snake->fruit->ligne;
+    // int colonneFruit = snake->fruit->colonne;
+    //
+    // inputList[4] = -10 ; //fruit haut
+    // inputList[5] = -10 ; //fruit bas
+    // inputList[6] = -10 ; //fruit droite
+    // inputList[7] = -10 ; //fruit gauche
+    //
+    // if(ligneFruit < ligneHead)
+    //     inputList[4] = 10 ;
+    // else if (ligneFruit > ligneHead)
+    //     inputList[5] = 10 ;
+    //
+    // if(colonneFruit > colonneHead)
+    //     inputList[6] = 10 ;
+    // else if (colonneFruit < colonneHead)
+    //     inputList[7] = 10 ;
+    //
     //
     // return inputList;
 
-    // input v2 : 8 input
-    double * inputList = malloc(nbInput * sizeof(double)) ;
-
-    int ligneHead = snake->head->ligne;
-    int colonneHead = snake->head->colonne;
-
-    inputList[0] = 0 ; //Danger haut
-    inputList[1] = 0 ; //Danger bas
-    inputList[2] = 0 ; //Danger droite
-    inputList[3] = 0 ; //Danger gauche
-
-    if( !(ligneHead-1 >= 0) || grille[ligneHead-1][colonneHead] == SNAKE  )
-        inputList[0] = 1;
-
-    if( !(ligneHead+1 < NB_LIG) || grille[ligneHead+1][colonneHead] == SNAKE  )
-        inputList[1] = 1;
-
-    if( !(colonneHead+1 < NB_COL) || grille[ligneHead][colonneHead+1] == SNAKE  )
-        inputList[2] = 1;
-
-    if( !(colonneHead-1 >= 0)  || grille[ligneHead][colonneHead-1] == SNAKE  )
-        inputList[3] = 1;
-
-
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // v3
+    // double * inputList = malloc(nbInput * sizeof(double)) ;
     //
-    int ligneFruit = snake->fruit->ligne;
-    int colonneFruit = snake->fruit->colonne;
-
-    inputList[4] = 0 ; //fruit haut
-    inputList[5] = 0 ; //fruit bas
-    inputList[6] = 0 ; //fruit droite
-    inputList[7] = 0 ; //fruit gauche
-
-    if(ligneFruit < ligneHead)
-        inputList[4] = 1 ;
-    else if (ligneFruit > ligneHead)
-        inputList[5] = 1 ;
-
-    if(colonneFruit > colonneHead)
-        inputList[6] = 1 ;
-    else if (colonneFruit < colonneHead)
-        inputList[7] = 1 ;
-
-
-    return inputList;
+    // int ligneHead = snake->head->ligne;
+    // int colonneHead = snake->head->colonne;
+    //
+    // //
+    // int ligneFruit = snake->fruit->ligne;
+    // int colonneFruit = snake->fruit->colonne;
+    //
+    // inputList[0] = -10 ; //fruit haut
+    // inputList[1] = -10 ; //fruit bas
+    // inputList[2] = -10 ; //fruit droite
+    // inputList[3] = -10 ; //fruit gauche
+    //
+    // if(ligneFruit < ligneHead)
+    //     inputList[0] = 10 ;
+    // else if (ligneFruit > ligneHead)
+    //     inputList[1] = 10 ;
+    //
+    // if(colonneFruit > colonneHead)
+    //     inputList[2] = 10 ;
+    // else if (colonneFruit < colonneHead)
+    //     inputList[3] = 10 ;
+    //
+    //
+    // return inputList;
 
 }
 /*
@@ -150,6 +179,7 @@ void initSnake( Snake * snake){
 
     snake->score = 1;
     snake->nbFruit = 0;
+    snake->health = 100;
 }
 
 //
@@ -223,11 +253,13 @@ Boolean move(Snake * snake, int i, int j){
     addHead( snake, snake->head->ligne + i, snake->head->colonne + j);
 
     //snake->score -= 1;
-
+    snake->health -= 1;
+    snake->score += 1;
     if( val == FRUIT){
         generateFruit(snake);
-        snake->score += 10;
+        snake->score += 20;
         snake->nbFruit += 1;
+        snake->health = 100;
     }
 
 
