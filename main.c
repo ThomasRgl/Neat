@@ -80,15 +80,14 @@ void playBest( NeuralNetwork ** population ){
     snake = malloc(sizeof(Snake));
     initSnake(snake);
     //
-    int try = 0;
-    while (end == FALSE && try<1000) {
+    while (end == FALSE && snake->health != 0 ) {
         setInput(nn, getInput(snake, NB_INPUT));
         compute(nn);
         resultat = result(nn);
 
         //                      Affichage
         jump(10);
-        //printNetwork(nn);
+        printNetwork(nn);
         afficherData(nn);
         afficherJeu(resultat);
         printf(">\n");
@@ -115,7 +114,6 @@ void playBest( NeuralNetwork ** population ){
                 end = TRUE;
                 break;
         }
-        try += 1;
 
     }
 
@@ -136,22 +134,18 @@ NeuralNetwork ** play( NeuralNetwork ** population , int printBest ){
         snake = malloc(sizeof(Snake));
         initSnake(snake);
         //
-        int try = 0;
-        while (end == FALSE && try<1000) {
-            if(/*try > 100*/getScore(snake) != try+1){
-                //printf("%d try! score: %lf \n",try,getScore(snake) );
-            }
+        while (end == FALSE && snake->health != 0) {
             setInput(population[i], getInput(snake, NB_INPUT));
             compute(population[i]);
             resultat = result(population[i]);
 
             //                      Affichage
-            //jump(10);
-            //printNetwork(population[i]);
-            //afficherData(population[i]);
-            //afficherJeu(resultat);
-            //printf(">\n");
-            //getchar();
+            // jump(10);
+            // printNetwork(population[i]);
+            // afficherData(population[i]);
+            // afficherJeu(resultat);
+            // printf(">\n");
+            // getchar();
 
             switch (resultat) {
                 case 0:
@@ -174,7 +168,6 @@ NeuralNetwork ** play( NeuralNetwork ** population , int printBest ){
                     end = TRUE;
                     break;
             }
-            try += 1;
         }
         setScore(population[i], getScore(snake), getFruit(snake));
         destroySnake(snake);
@@ -190,10 +183,10 @@ NeuralNetwork ** play( NeuralNetwork ** population , int printBest ){
 
 
     //                                  Affichage
-    //printPopulaton(population);
-    //afficherInfo( population);
-    //printf(">\n");
-    //getchar();
+    // printPopulaton(population);
+    // afficherInfo( population);
+    // printf(">\n");
+    // getchar();
 
     if(printBest == 1)
         playBest(population);
@@ -222,7 +215,7 @@ int main() {
 
     initGame(population, data, fitnessClassement );
 
-    for( int j = 0; j < 3000; j++){
+    for( int j = 0; j < 2001; j++){
 
         if(j%500 == 0)
             population = play(  population, 1 );

@@ -38,8 +38,17 @@ void initGlobalVar(){
 
     TAILLE_CROSSOVER_MAX = (TOTAL_WEIGHT * CROSSOVER_PERCENT ) / 100;
 
-    inputChar[0] = "distance Fruit verticale";
-    inputChar[1] = "distance Fruit horizontale";
+    inputChar[0] = "danger haut";
+    inputChar[1] = "danger bas";
+    inputChar[2] = "danger droite";
+    inputChar[3] = "danger gauche";
+    inputChar[4] = "fruit haut";
+    inputChar[5] = "fruit bas";
+    inputChar[6] = "fruit droite";
+    inputChar[7] = "fruit gauche";
+
+    inputChar[0] = "fruit vertical";
+    inputChar[1] = "fruit horizontale";
     inputChar[2] = "haut";
     inputChar[3] = "bas";
     inputChar[4] = "gauche";
@@ -59,8 +68,10 @@ void initGlobalVar(){
 
 //
 double sigmoid(double x){
-    //return 1 / (1 + exp(-x) ); //default sigmoid
-    return 1 / (1 + exp(-x) ) - 0.5;
+    //return x;
+    //return 1 / (1 + exp(-((x-0.5)*10)) );
+    return 1 / (1 + exp(-(x)) ); //default sigmoid
+    //return 1 / (1 + exp(-x) ) - 0.5;
     //return ((1 / (1 + exp(-(x-5)*0.6)) -0.5)*2); //renvoi un nombre entre -1 et 1
 }
 
@@ -123,7 +134,7 @@ unsigned long long result( NeuralNetwork * nn ){
 
     //
     unsigned long long index;
-    double max = -1;
+    double max = -999999;
     for(unsigned long long  i = 0; i < layer->length; i++){
         if(max <= layer->neurons[i]){
             max = layer->neurons[i];
@@ -146,11 +157,16 @@ void compute(NeuralNetwork * nn){
 
     while(layer){
         for (unsigned long long i = 0; i < layer->length ; i++) {
+            //printf("neuron %lld \n",i );
             s = (layer->bias)[i];
             for (unsigned long long j = 0; j < layer->previousLayer->length; j++ ){
-                s += (layer->w)[i][j] * layer->neurons[i];
+                //printf("%lf /* %lf = %lf +(s) %lf =  %lf\n",(layer->w)[i][j] , layer->previousLayer->neurons[j], (layer->w)[i][j] * layer->previousLayer->neurons[j], s, s + (layer->w)[i][j] * layer->previousLayer->neurons[j] );
+                s += (layer->w)[i][j] * layer->previousLayer->neurons[j];
+
             }
             (layer->neurons)[i] = sigmoid(s);
+            // printf("neurone : %lf\n", (layer->neurons)[i] );
+            // printf("neurone : %lf\n", (layer->previousLayer->neurons)[i] );
         }
 
         //
@@ -167,10 +183,10 @@ void setInput(NeuralNetwork * nn, double * inputList){
     //printf("%llu\n",layer->length );
     for( unsigned long long i = 0; i < layer->length; i++ ){
         //(layer->neurons)[i] = inputList[i]; //input par default
-        (layer->neurons)[i] = newSigmoid(inputList[i]); //transforme l'input en un chiffre entre 0 et 1
+        (layer->neurons)[i] = sigmoid(inputList[i]); //transforme l'input en un chiffre entre 0 et 1
     }
-    (layer->neurons)[0] = newSigmoid2(inputList[0]);
-    (layer->neurons)[1] = newSigmoid2(inputList[1]);
+    //(layer->neurons)[0] = sigmoid(inputList[0]);
+    //(layer->neurons)[1] = sigmoid(inputList[1]);
     //Test
     //for( unsigned long long i = 0; i < layer->length; i++ )
     //    printf("input num %llu : %lf\n", i, (layer->neurons)[i]);
@@ -183,7 +199,7 @@ void printNetwork(NeuralNetwork * nn){
 
     Layer * layer = NULL;
     printf("---------------------\n\n     data : \n\n" );
-    printf("score %lf\n", nn->score );
+    printf("score %lf\n", nn->rawScore );
     printf("fitness %lf\n", nn->fitness );
     printf("id %d\n", nn->id );
 
@@ -285,9 +301,9 @@ void initWeigth(NeuralNetwork * nn) {
     //
     while(layer){
         for (unsigned long long i = 0; i < layer->length ; i++) {
-            (layer->bias)[i] = (double)rand() / (double)RAND_MAX;
+            (layer->bias)[i] = 1 - ((double)rand() / (double)RAND_MAX)*2 ;
             for (unsigned long long j = 0; j < layer->previousLayer->length; j++ )
-                (layer->w)[i][j] = (double)rand() / (double)RAND_MAX;
+                (layer->w)[i][j] = 1 - ((double)rand() / (double)RAND_MAX)*2;
         }
         layer = layer->nextLayer;
     }
@@ -533,17 +549,17 @@ void mutate( NeuralNetwork * nn ){
     while(layer){
         for (unsigned long long i = 0; i < layer->length ; i++) {
 
-            if( MUTATION_RATE > (double) rand()/RAND_MAX){ (layer->bias)[i] += normalRandom()*0.2;}
-
-            for (unsigned long long j = 0; j < layer->previousLayer->length; j++ ){
-                if( MUTATION_RATE > (double) rand()/RAND_MAX){ (layer->w)[i][j] += normalRandom()*0.2;}
-            }
-
-            // if( MUTATION_RATE > (double) rand()/RAND_MAX){ (layer->bias)[i] = (double) rand()/RAND_MAX;}
+            // if( MUTATION_RATE > (double) rand()/RAND_MAX){ (layer->bias)[i] += normalRandom()*0.2;}
             //
             // for (unsigned long long j = 0; j < layer->previousLayer->length; j++ ){
-            //     if( MUTATION_RATE > (double) rand()/RAND_MAX){ (layer->w)[i][j] = (double) rand()/RAND_MAX;}
+            //     if( MUTATION_RATE > (double) rand()/RAND_MAX){ (layer->w)[i][j] += normalRandom()*0.2;}
             // }
+
+            if( MUTATION_RATE > (double) rand()/RAND_MAX){ (layer->bias)[i] = 1 - ((double) rand()/RAND_MAX)*2 ;}
+
+            for (unsigned long long j = 0; j < layer->previousLayer->length; j++ ){
+                if( MUTATION_RATE > (double) rand()/RAND_MAX){ (layer->w)[i][j] = 1 - ((double) rand()/RAND_MAX)*2 ;}
+            }
         }
         layer = layer->nextLayer;
     }
